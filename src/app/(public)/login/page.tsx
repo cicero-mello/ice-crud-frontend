@@ -1,6 +1,6 @@
 "use server"
 
-import { LoginForm } from "./(form)/login-form"
+import { LoginForm } from "./(form)"
 
 const Login = () => {
 

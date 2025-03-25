@@ -1,3 +1,5 @@
+"use client"
+
 import { noScriptPattern, usernameSpecialCharacters } from "./regex"
 import { z } from "zod"
 

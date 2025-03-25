@@ -1,13 +1,16 @@
 "use client"
 
-import { login } from "@/api/public"
 import { LoginFields, loginObject } from "@/zod/login"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
-import { redirect } from "next/navigation"
+import { login } from "@/api/public"
+import { useState } from "react"
 
 export const LoginForm = () => {
+    const router = useRouter()
+
+    const [isLoading, setIsLoading] = useState(false)
     const [backendError, setBackendError] = useState("")
 
     const { handleSubmit, register, formState } = useForm({
@@ -18,23 +21,27 @@ export const LoginForm = () => {
 
     const onSubmit = async (data: LoginFields) => {
         setBackendError("")
+        setIsLoading(true)
 
         const resp = await login({
             name: data.name,
             pass: data.pass
         })
+
         if (resp.error) {
             setBackendError(resp.error.message)
+            setIsLoading(false)
             return
         }
+
         document.cookie = `refresh_token=${resp.data.refreshToken}`
         document.cookie = `access_token=${resp.data.accessToken}`
-        redirect("/ice-creams")
+        router.push("/ice-creams")
     }
 
     const haveVisibleErrors = !!errors.name || !!errors.pass
     const isAllFieldsDirty = dirtyFields.name && dirtyFields.pass
-    const formSubmitEnable = !haveVisibleErrors && isAllFieldsDirty && !isSubmitting
+    const formSubmitEnable = !haveVisibleErrors && isAllFieldsDirty && !isSubmitting && !isLoading
 
     return (
         <form
@@ -88,7 +95,7 @@ export const LoginForm = () => {
                     "transition duration-100"
                 }
             >
-                {isSubmitting ? "Loading..." : "Login"}
+                {(isSubmitting || isLoading) ? "Loading..." : "Login"}
             </button>
         </form>
     )
