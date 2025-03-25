@@ -8,7 +8,7 @@ const publicRoutes = [
 ] as const
 
 const REDIRECT_WHEN_NOT_AUTHENTICATED_ROUTE = "/login"
-const REDIRECT_WHEN_AUTHENTICATED_ROUTE = "/"
+const REDIRECT_WHEN_AUTHENTICATED_ROUTE = "/ice-creams"
 
 export const middleware = (request: NextRequest) => {
     const path = request.nextUrl.pathname
