@@ -1,6 +1,6 @@
 "use server"
 
-import { CreateAccountForm } from "./(form)"
+import { CreateAccountForm } from "./create-account-form"
 
 const CreateAccount = () => {
 

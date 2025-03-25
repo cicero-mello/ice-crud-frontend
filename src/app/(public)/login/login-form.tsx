@@ -2,14 +2,16 @@
 
 import { LoginFields, loginObject } from "@/zod/login"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useState, useTransition } from "react"
+import { setCookiesLogin } from "@/utils/cookies"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { login } from "@/api/public"
-import { useState } from "react"
 
 export const LoginForm = () => {
     const router = useRouter()
 
+    const [_, startTransition] = useTransition()
     const [isLoading, setIsLoading] = useState(false)
     const [backendError, setBackendError] = useState("")
 
@@ -34,9 +36,13 @@ export const LoginForm = () => {
             return
         }
 
-        document.cookie = `refresh_token=${resp.data.refreshToken}`
-        document.cookie = `access_token=${resp.data.accessToken}`
-        router.push("/ice-creams")
+        startTransition(async () => {
+            await setCookiesLogin({
+                accessToken: resp.data.accessToken,
+                refreshToken: resp.data.refreshToken
+            })
+            router.push("/ice-creams")
+        })
     }
 
     const haveVisibleErrors = !!errors.name || !!errors.pass

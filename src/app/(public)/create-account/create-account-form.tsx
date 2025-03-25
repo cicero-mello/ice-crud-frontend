@@ -2,15 +2,17 @@
 
 import { createCustomerObject, CreateCustomerFields } from "@/zod/create-customer"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useState, useTransition } from "react"
 import { createCustomer } from "@/api/public"
+import { setCookiesLogin } from "@/utils/cookies"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { Avatar } from "@/enums"
-import { useState } from "react"
 
 export const CreateAccountForm = () => {
     const router = useRouter()
 
+    const [_, startTransition] = useTransition()
     const [isLoading, setIsLoading] = useState(false)
     const [backendError, setBackendError] = useState("")
 
@@ -35,9 +37,13 @@ export const CreateAccountForm = () => {
             return
         }
 
-        document.cookie = `refresh_token=${resp.data.refreshToken}`
-        document.cookie = `access_token=${resp.data.accessToken}`
-        router.push("/ice-creams")
+        startTransition(async () => {
+            await setCookiesLogin({
+                accessToken: resp.data.accessToken,
+                refreshToken: resp.data.refreshToken
+            })
+            router.push("/ice-creams")
+        })
     }
 
     const haveVisibleErrors = !!errors.name || !!errors.pass || !!errors.avatar

@@ -1,8 +1,8 @@
 "use server"
 
-import { LoginForm } from "./(form)"
+import { LoginForm } from "./login-form"
 
-const Login = () => {
+const Login = async () => {
 
     return (
         <div className="items-center flex flex-col">
