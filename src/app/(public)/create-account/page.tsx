@@ -1,7 +1,14 @@
+"use server"
+
+import { CreateAccountForm } from "./(form)"
+
 const CreateAccount = () => {
 
     return (
-        <div> CreateAccount </div>
+        <div className="items-center flex flex-col">
+            <h1> Create Account </h1>
+            <CreateAccountForm />
+        </div>
     )
 }
 
