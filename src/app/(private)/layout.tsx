@@ -1,6 +1,6 @@
 "use server"
 
-import { Header } from "@/components/private"
+import { PrivateHeader } from "@/components"
 
 const PrivateRouteLayout = (
     { children }: Readonly<{ children: React.ReactNode}>
@@ -8,7 +8,7 @@ const PrivateRouteLayout = (
 
     return (
         <>
-            <Header />
+            <PrivateHeader />
             <main> {children} </main>
         </>
     )

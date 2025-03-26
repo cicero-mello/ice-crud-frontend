@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 
-export const Header = async () => {
+export const PrivateHeader = async () => {
 
     return (
         <header

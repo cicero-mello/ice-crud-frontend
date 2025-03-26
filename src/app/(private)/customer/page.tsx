@@ -1,7 +1,13 @@
+"use client"
+
+import { LogoutButton } from "@/components/customer"
+
 const CustomerSettings = () => {
 
     return (
-        <div> CustomerSettings </div>
+        <div>
+            <LogoutButton />
+        </div>
     )
 }
 
