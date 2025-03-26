@@ -22,7 +22,7 @@ export const LogoutButton = () => {
             className={
                 "disabled:opacity-30 disabled:pointer-events-none " +
                 "transition duration-150 " +
-                "cursor-pointer underline"
+                "cursor-pointer underline w-fit"
             }
         >
             Logout

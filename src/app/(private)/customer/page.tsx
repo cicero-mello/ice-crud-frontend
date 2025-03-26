@@ -1,12 +1,13 @@
-"use client"
+"use server"
 
-import { LogoutButton } from "@/components/customer"
+import { DeleteAccountButton, LogoutButton } from "@/components/customer"
 
 const CustomerSettings = () => {
 
     return (
-        <div>
+        <div className="flex flex-col gap-4 pt-10 items-center">
             <LogoutButton />
+            <DeleteAccountButton />
         </div>
     )
 }
