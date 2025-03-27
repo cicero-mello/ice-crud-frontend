@@ -1,4 +1,6 @@
-import axios, { AxiosError, AxiosRequestConfig } from "axios"
+import axios, { AxiosError, AxiosRequestConfig, InternalAxiosRequestConfig } from "axios"
+import { refresh } from "./refresh"
+import { deleteCookiesLogin, getCookiesLogin, setCookiesLogin } from "@/utils/cookies"
 
 const baseURL = process.env.SERVER_URL!
 
@@ -9,44 +11,61 @@ export const api = axios.create({
     }
 })
 
-const refreshToken = async ():Promise<string> => {
+const onResponseError = async (error: AxiosError) => {
+    const isUnauthorized = error.response?.status === 401
+    const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean }
+    const isFirstCall = !originalRequest._retry
+
+    if (!isUnauthorized || !isFirstCall) {
+        return Promise.reject(error)
+    }
+
+    originalRequest._retry = true
+
     try {
-        const response = await axios.post(`${baseURL}/refresh`, {
-            // Envie os dados necessários para a rota de refresh, como refresh token armazenado
-        })
-        // Supondo que o novo access token esteja em response.data.accessToken
-        return response.data.accessToken
-    } catch (error) {
-        throw new Error("Erro ao atualizar o token")
+        const { refreshToken } = await getCookiesLogin()
+        if (!refreshToken) {
+            throw new Error("Inexistent RefreshToken!")
+        }
+
+        const { error, data } = await refresh({ refreshToken })
+
+        if (error) {
+            throw new Error(error.message)
+        }
+
+        if (!!originalRequest.headers) {
+            originalRequest.headers.accessToken = data.accessToken
+        }
+        else {
+            originalRequest.headers = { "accessToken": data.accessToken }
+        }
+
+        await setCookiesLogin({ refreshToken, accessToken: data.accessToken })
+
+        return axios(originalRequest)
+
+    } catch (refreshError) {
+        await deleteCookiesLogin()
+        return Promise.reject(refreshError)
     }
 }
 
-// Interceptor para tratar respostas com erro de autenticação
 api.interceptors.response.use(
     response => response,
-    async (error: AxiosError) => {
-        const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean }
+    onResponseError
+)
 
-        if (error.response?.status === 401 && !originalRequest._retry) {
-            originalRequest._retry = true
+const onRequestAddAccessToken = async (config: InternalAxiosRequestConfig<any>) => {
+    const { accessToken } = await getCookiesLogin()
+    if (!accessToken) throw new Error("Inexistent AccessToken")
 
-            try {
-                const newAccessToken = await refreshToken()
+    config.headers.accessToken = accessToken
 
-                // Atualiza o header da requisição original com o novo token
-                if (originalRequest.headers) {
-                    originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`
-                } else {
-                    originalRequest.headers = { "Authorization": `Bearer ${newAccessToken}` }
-                }
+    return config
+}
 
-                // Reexecuta a requisição original com o novo token
-                return axios(originalRequest)
-            } catch (refreshError) {
-                // Aqui você pode redirecionar para login ou lidar de outra forma com a falha
-                return Promise.reject(refreshError)
-            }
-        }
-        return Promise.reject(error)
-    }
+api.interceptors.request.use(
+    onRequestAddAccessToken,
+    (error) => Promise.reject(error)
 )
