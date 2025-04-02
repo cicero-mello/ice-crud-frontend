@@ -42,3 +42,14 @@ export const getCookiesLogin = async (): Promise<GetCookiesLoginResponse> => {
         refreshToken: refreshToken ?? null
     }
 }
+
+export const extractCookieValue = async (
+    cookieName: string,
+    setCookie: string[]
+): Promise<string | null> => {
+    for (const cookie of setCookie) {
+        const match = cookie.match(new RegExp(`^${cookieName}=([^;]+)`))
+        if (match) return match[1]
+    }
+    return null
+}

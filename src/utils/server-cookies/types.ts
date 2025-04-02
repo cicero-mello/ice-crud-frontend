@@ -1,8 +1,8 @@
 "use server"
 
 export interface SetCookiesLoginParams {
-    accessToken?: string
-    refreshToken?: string
+    accessToken?: string | null
+    refreshToken?: string | null
 }
 
 export interface GetCookiesLoginResponse {

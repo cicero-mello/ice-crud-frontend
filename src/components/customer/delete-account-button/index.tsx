@@ -32,18 +32,6 @@ export const DeleteAccountButton = () => {
 
     const onSubmit = async (field: DeleteCustomerFields) => {
         console.log(field)
-        console.log("caiu no submit")
-        const a = await fetch(
-            "api/get-customer-data",
-            {
-                method: "GET",
-                credentials: "include"
-            }
-        )
-        console.log(a)
-        const data = await a.json()
-        console.log(data)
-
     }
 
     return (

@@ -8,6 +8,7 @@ export interface Tokens {
 export interface ApiResponse<T> {
     status: number
     data: T
+    headers: Headers
 }
 
 export type ApiData<T> = T & { message?: string | never }

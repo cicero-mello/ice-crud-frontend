@@ -8,18 +8,21 @@ const BASE_URL = "http://localhost:8080"
 export const createResponse = async (
     data: object, config?: ResponseInit
 ): Promise<Response> => new Response(JSON.stringify(data), {
-    headers: config?.headers ?? { "Content-Type": "application/json" },
+    headers: {
+        "Content-Type": "application/json",
+        ...config?.headers
+    },
     status: config?.status ?? 200,
     statusText: config?.statusText ?? undefined
 })
 
-const refresh = async (): Promise<Tokens> => {
+const refresh = async (): Promise<void> => {
     const {
         accessToken,
         refreshToken
     } = await serverCookies.getCookiesLogin()
 
-    const response = await fetch(
+    const { status, headers } = await fetch(
         BASE_URL + "/refresh",
         {
             method: "GET",
@@ -34,20 +37,22 @@ const refresh = async (): Promise<Tokens> => {
         }
     )
 
-    const data = await response.json() as { accessToken: string }
-
-    if (response.status === 200) {
-        await serverCookies.setCookiesLogin({
-            accessToken: data.accessToken
-        })
-    } else {
+    if (status !== 200) {
         await serverCookies.deleteCookiesLogin()
+        return
     }
 
-    return {
-        refreshToken: refreshToken,
-        accessToken: data.accessToken
-    }
+    const setCookie = headers.getSetCookie()
+
+    const newAccessToken = await serverCookies.extractCookieValue(
+        "access_token",
+        setCookie
+    )
+
+    await serverCookies.setCookiesLogin({
+        accessToken: newAccessToken,
+        refreshToken: refreshToken
+    })
 }
 
 export const post = async <T>(
@@ -72,6 +77,7 @@ export const post = async <T>(
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
+                "Access-Control-Allow-Credentials": "true",
                 ...config?.headers,
                 Cookie: (
                     `refresh_token=${refreshToken}; `
@@ -84,7 +90,8 @@ export const post = async <T>(
     let response = await getResponse({ refreshToken, accessToken })
 
     if (response.status === 401) {
-        const updatedTokens = await refresh()
+        await refresh()
+        const updatedTokens = await serverCookies.getCookiesLogin()
 
         response = await getResponse({
             refreshToken: updatedTokens.refreshToken,
@@ -96,7 +103,8 @@ export const post = async <T>(
 
     return {
         status: response.status,
-        data: data
+        headers: response.headers,
+        data: data,
     }
 }
 
@@ -130,7 +138,8 @@ export const get = async <T>(
     let response = await getResponse({ refreshToken, accessToken })
 
     if (response.status === 401) {
-        const updatedTokens = await refresh()
+        await refresh()
+        const updatedTokens = await serverCookies.getCookiesLogin()
 
         response = await getResponse({
             refreshToken: updatedTokens.refreshToken,
@@ -142,6 +151,7 @@ export const get = async <T>(
 
     return {
         status: response.status,
+        headers: response.headers,
         data: data
     }
 }

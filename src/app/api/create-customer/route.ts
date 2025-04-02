@@ -1,8 +1,8 @@
 "use server"
 
 import { CreateCustomerRequest, CreateCustomerResponse } from "./types"
-import * as serverCookies from "@/utils/server-cookies"
 import { post, createResponse } from "../index"
+import * as serverCookies from "@/utils/server-cookies"
 
 export const POST = async (request: Request): Promise<Response> => {
     const {
@@ -11,19 +11,29 @@ export const POST = async (request: Request): Promise<Response> => {
         avatar
     } = await request.json() as CreateCustomerRequest
 
-    const response = await post<CreateCustomerResponse>("/create-customer", {
-        name, pass, avatar
-    })
+    const { data, status, headers } = await post<CreateCustomerResponse>(
+        "/create-customer",
+        { name, pass, avatar }
+    )
 
-    if(response.status === 201){
+    if (status === 201) {
+        const setCookie = headers.getSetCookie()
+
+        const accessToken = await serverCookies.extractCookieValue(
+            "access_token",
+            setCookie
+        )
+
+        const refreshToken = await serverCookies.extractCookieValue(
+            "refresh_token",
+            setCookie
+        )
+
         await serverCookies.setCookiesLogin({
-            accessToken: response.data.accessToken,
-            refreshToken: response.data.refreshToken
+            accessToken,
+            refreshToken
         })
     }
 
-    return await createResponse(
-        response.data,
-        { status: response.status }
-    )
+    return await createResponse(data, { status })
 }

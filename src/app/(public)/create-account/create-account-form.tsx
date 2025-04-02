@@ -1,12 +1,12 @@
 "use client"
 
+import { CreateCustomerRequest, CreateCustomerResponse } from "@/app/api/create-customer/types"
 import { createCustomerObject, CreateCustomerFields } from "@/zod/create-customer"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { Avatar } from "@/enums"
-import { CreateCustomerResponse } from "@/app/api/create-customer/types"
 
 export const CreateAccountForm = () => {
     const router = useRouter()
@@ -31,7 +31,7 @@ export const CreateAccountForm = () => {
                 name: fields.name,
                 pass: fields.pass,
                 avatar: fields.avatar
-            })
+            } as CreateCustomerRequest)
         })
         const data = await response.json() as CreateCustomerResponse
 

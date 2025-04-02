@@ -1,11 +1,11 @@
 "use client"
 
+import { LoginRequest, LoginResponse } from "@/app/api/login/types"
 import { LoginFields, loginObject } from "@/zod/login"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
-import { LoginResponse } from "@/app/api/login/types"
 
 export const LoginForm = () => {
     const router = useRouter()
@@ -29,7 +29,7 @@ export const LoginForm = () => {
             body: JSON.stringify({
                 name: field.name,
                 pass: field.pass
-            })
+            } as LoginRequest)
         })
         const data = await response.json() as LoginResponse
 
