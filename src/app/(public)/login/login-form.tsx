@@ -2,16 +2,14 @@
 
 import { LoginFields, loginObject } from "@/zod/login"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useState, useTransition } from "react"
-import { setCookiesLogin } from "@/utils/cookies"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
-import { login } from "@/api/public"
+import { LoginResponse } from "@/app/api/login/types"
 
 export const LoginForm = () => {
     const router = useRouter()
 
-    const [_, startTransition] = useTransition()
     const [isLoading, setIsLoading] = useState(false)
     const [backendError, setBackendError] = useState("")
 
@@ -21,28 +19,27 @@ export const LoginForm = () => {
 
     const { errors, dirtyFields, isSubmitting } = formState
 
-    const onSubmit = async (data: LoginFields) => {
+    const onSubmit = async (field: LoginFields) => {
         setBackendError("")
         setIsLoading(true)
 
-        const resp = await login({
-            name: data.name,
-            pass: data.pass
+        const response = await fetch("/api/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                name: field.name,
+                pass: field.pass
+            })
         })
+        const data = await response.json() as LoginResponse
 
-        if (resp.error) {
-            setBackendError(resp.error.message)
+        if (response.status !== 200) {
+            setBackendError(data.message ?? "Next Server Error")
             setIsLoading(false)
             return
         }
 
-        startTransition(async () => {
-            await setCookiesLogin({
-                accessToken: resp.data.accessToken,
-                refreshToken: resp.data.refreshToken
-            })
-            router.push("/ice-creams")
-        })
+        router.push("/ice-creams")
     }
 
     const haveVisibleErrors = !!errors.name || !!errors.pass

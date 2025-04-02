@@ -1,6 +1,6 @@
 "use client"
 
-import { deleteCookiesLogin } from "@/utils/cookies"
+import * as serverCookies from "@/utils/server-cookies"
 import { useRouter } from "next/navigation"
 import { useTransition } from "react"
 
@@ -10,7 +10,7 @@ export const LogoutButton = () => {
 
     const handleClick = async () => {
         startTransition(async () => {
-            await deleteCookiesLogin()
+            await serverCookies.deleteCookiesLogin()
             router.push("/login")
         })
     }

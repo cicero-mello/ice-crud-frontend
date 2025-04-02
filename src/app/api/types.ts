@@ -1,0 +1,13 @@
+"use server"
+
+export interface Tokens {
+    accessToken: string | null
+    refreshToken: string | null
+}
+
+export interface ApiResponse<T> {
+    status: number
+    data: T
+}
+
+export type ApiData<T> = T & { message?: string | never }

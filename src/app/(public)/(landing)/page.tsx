@@ -1,7 +1,11 @@
+"use server"
+
 const Landing = () => {
 
     return (
-        <div> LandingPage </div>
+        <div>
+            LandingPage
+        </div>
     )
 }
 

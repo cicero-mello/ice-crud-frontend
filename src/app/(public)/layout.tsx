@@ -1,13 +1,12 @@
 "use server"
 
 import { PublicHeader, PrivateHeader } from "@/components"
-import { getCookiesLogin } from "@/utils/cookies"
+import * as serverCookies from "@/utils/server-cookies"
 
 const PublicRouteLayout = async (
     { children }: Readonly<{ children: React.ReactNode }>
 ) => {
-    const { accessToken } = await getCookiesLogin()
-    console.log(accessToken)
+    const { accessToken } = await serverCookies.getCookiesLogin()
 
     return (
         <>

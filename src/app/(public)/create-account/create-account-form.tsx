@@ -2,17 +2,15 @@
 
 import { createCustomerObject, CreateCustomerFields } from "@/zod/create-customer"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useState, useTransition } from "react"
-import { createCustomer } from "@/api/public"
-import { setCookiesLogin } from "@/utils/cookies"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { Avatar } from "@/enums"
+import { CreateCustomerResponse } from "@/app/api/create-customer/types"
 
 export const CreateAccountForm = () => {
     const router = useRouter()
 
-    const [_, startTransition] = useTransition()
     const [isLoading, setIsLoading] = useState(false)
     const [backendError, setBackendError] = useState("")
 
@@ -22,28 +20,28 @@ export const CreateAccountForm = () => {
 
     const { errors, dirtyFields, isSubmitting } = formState
 
-    const onSubmit = async (data: CreateCustomerFields) => {
+    const onSubmit = async (fields: CreateCustomerFields) => {
         setBackendError("")
         setIsLoading(true)
 
-        const resp = await createCustomer({
-            name: data.name,
-            pass: data.pass,
-            avatar: data.avatar
+        const response = await fetch("/api/create-customer", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                name: fields.name,
+                pass: fields.pass,
+                avatar: fields.avatar
+            })
         })
-        if (resp.error) {
-            setBackendError(resp.error.message)
+        const data = await response.json() as CreateCustomerResponse
+
+        if (response.status !== 201) {
+            setBackendError(data.message ?? "Next Server Error")
             setIsLoading(false)
             return
         }
 
-        startTransition(async () => {
-            await setCookiesLogin({
-                accessToken: resp.data.accessToken,
-                refreshToken: resp.data.refreshToken
-            })
-            router.push("/ice-creams")
-        })
+        router.push("/ice-creams")
     }
 
     const haveVisibleErrors = !!errors.name || !!errors.pass || !!errors.avatar

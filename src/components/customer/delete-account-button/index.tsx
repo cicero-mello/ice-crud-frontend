@@ -19,7 +19,6 @@ export const DeleteAccountButton = () => {
     }
 
     const handleClickDialog = (event: MouseEvent<HTMLDialogElement>) => {
-
         const element = event.target as HTMLElement
         const rect = element.getBoundingClientRect()
         const isClickInBackdrop = (
@@ -31,9 +30,20 @@ export const DeleteAccountButton = () => {
         if (isClickInBackdrop) closeDialog()
     }
 
-    const onSubmit = async (data: DeleteCustomerFields) => {
+    const onSubmit = async (field: DeleteCustomerFields) => {
+        console.log(field)
+        console.log("caiu no submit")
+        const a = await fetch(
+            "api/get-customer-data",
+            {
+                method: "GET",
+                credentials: "include"
+            }
+        )
+        console.log(a)
+        const data = await a.json()
         console.log(data)
-        // TODO backend submit
+
     }
 
     return (

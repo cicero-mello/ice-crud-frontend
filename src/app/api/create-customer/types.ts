@@ -1,6 +1,7 @@
 "use server"
 
 import { Avatar } from "@/enums"
+import { ApiData } from "../types"
 
 export interface CreateCustomerRequest {
     name: string
@@ -8,7 +9,7 @@ export interface CreateCustomerRequest {
     avatar: Avatar
 }
 
-export interface CreateCustomerResponse {
+export type CreateCustomerResponse = ApiData<{
     accessToken: string
     refreshToken: string
-}
+}>

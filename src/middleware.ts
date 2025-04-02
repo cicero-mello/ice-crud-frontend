@@ -12,12 +12,12 @@ const REDIRECT_WHEN_AUTHENTICATED_ROUTE = "/ice-creams"
 
 export const middleware = (request: NextRequest) => {
     const path = request.nextUrl.pathname
-    const accessToken = request.cookies.get("access_token")
+    const haveToken = !!request.cookies.get("access_token")?.value
     const publicRoute = publicRoutes.find(
         (route) => route.path === path
     )
 
-    if (accessToken) {
+    if (haveToken) {
         if (publicRoute?.whenAuthenticated === "redirect") {
             const url = request.nextUrl.clone()
             url.pathname = REDIRECT_WHEN_AUTHENTICATED_ROUTE

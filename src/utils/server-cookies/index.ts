@@ -9,17 +9,19 @@ export const setCookiesLogin = async ({
 }: SetCookiesLoginParams) => {
     const cookiesStore = await cookies()
 
-    cookiesStore.set("access_token", accessToken, {
-        httpOnly: true,
-        secure: true,
-        path: "/",
-    })
+    if (accessToken) {
+        cookiesStore.set("access_token", accessToken, {
+            httpOnly: true,
+            path: "/"
+        })
+    }
 
-    cookiesStore.set("refresh_token", refreshToken, {
-        httpOnly: true,
-        secure: true,
-        path: "/",
-    })
+    if (refreshToken) {
+        cookiesStore.set("refresh_token", refreshToken, {
+            httpOnly: true,
+            path: "/"
+        })
+    }
 }
 
 export const deleteCookiesLogin = async () => {
