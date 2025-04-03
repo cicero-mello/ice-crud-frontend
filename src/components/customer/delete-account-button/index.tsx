@@ -1,19 +1,30 @@
 "use client"
 
+import { DeleteCustomerRequest, DeleteCustomerResponse } from "@/app/api/delete-customer/types"
 import { DeleteCustomerFields, deleteCustomerObject } from "@/zod/delete-customer"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useRef, MouseEvent } from "react"
+import { useRef, MouseEvent, useTransition } from "react"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
+import * as serverCookies from "@/utils/server-cookies"
 
 export const DeleteAccountButton = () => {
-    const { handleSubmit, register, formState, reset } = useForm({
-        resolver: zodResolver(deleteCustomerObject)
-    })
-    const { errors, dirtyFields } = formState
-
+    const router = useRouter()
     const dialogRef = useRef<HTMLDialogElement>(null)
+    const [isPending, startTransition] = useTransition()
+
+    const {
+        handleSubmit,
+        register,
+        formState: { errors, dirtyFields, isSubmitting },
+        reset,
+        setError,
+        clearErrors,
+    } = useForm({ resolver: zodResolver(deleteCustomerObject) })
+
 
     const closeDialog = () => {
+        if(isPending || isSubmitting) return
         dialogRef.current!.close()
         reset()
     }
@@ -30,8 +41,31 @@ export const DeleteAccountButton = () => {
         if (isClickInBackdrop) closeDialog()
     }
 
-    const onSubmit = async (field: DeleteCustomerFields) => {
-        console.log(field)
+    const onSubmit = async (
+        field: DeleteCustomerFields
+    ) => startTransition(async () => {
+        const response = await fetch("api/delete-customer", {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                pass: field.pass
+            } as DeleteCustomerRequest)
+        })
+
+        if(response.status != 200){
+            const data = await response.json() as DeleteCustomerResponse
+            setError("root.serverError", { type: "custom", message: data.message })
+            return
+        }
+
+        await serverCookies.deleteCookiesLogin()
+        router.push("/login")
+    })
+
+    const handleKeyDownPass = () => {
+        if(!!errors.root?.serverError){
+            clearErrors()
+        }
     }
 
     return (
@@ -60,7 +94,9 @@ export const DeleteAccountButton = () => {
                     <label>
                         Confirm your password:
                         <input
+                            id="pass_input"
                             type="password"
+                            onKeyDown={handleKeyDownPass}
                             {...register("pass")}
                             className="border-1 border-black rounded-sm ml-4  p-1 pl-2 pr-2"
                         />
@@ -68,20 +104,30 @@ export const DeleteAccountButton = () => {
                     {errors.pass &&
                         <p>{errors.pass.message}</p>
                     }
+                    {errors.root?.serverError &&
+                        <p>{errors.root.serverError.message}</p>
+                    }
                     <div className="flex justify-between mt-7">
                         <button
                             children="Cancel"
                             type="button"
                             onClick={closeDialog}
+                            disabled={isPending || isSubmitting}
                             className={
+                                "disabled:opacity-30 disabled:pointer-events-none " +
                                 "cursor-pointer underline"
                             }
                         />
                         <button
                             type="submit"
                             onClick={(e) => e.stopPropagation()}
-                            disabled={!dirtyFields.pass || !!errors.pass}
                             children="DELETE ACCOUNT"
+                            disabled={
+                                !dirtyFields.pass ||
+                                !!errors.pass ||
+                                isPending ||
+                                isSubmitting
+                            }
                             className={
                                 "disabled:opacity-30 disabled:pointer-events-none " +
                                 "cursor-pointer underline font-bold text-red-950"

@@ -12,3 +12,5 @@ export interface ApiResponse<T> {
 }
 
 export type ApiData<T> = T & { message?: string | never }
+
+export type RequestConfig = Omit<RequestInit, "body" | "method">

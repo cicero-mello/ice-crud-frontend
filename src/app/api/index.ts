@@ -1,7 +1,7 @@
 "use server"
 
 import * as serverCookies from "@/utils/server-cookies"
-import { ApiResponse, Tokens } from "./types"
+import { ApiResponse, RequestConfig, Tokens } from "./types"
 
 const BASE_URL = "http://localhost:8080"
 
@@ -55,67 +55,13 @@ const refresh = async (): Promise<void> => {
     })
 }
 
-export const post = async <T>(
+const request = async <T>(
+    method: "GET" | "POST" | "DELETE",
     url: string,
-    body: object,
-    config?: Omit<RequestInit, "body" | "method">
+    body?: object,
+    config?: RequestConfig
 ): Promise<ApiResponse<T>> => {
-    const {
-        accessToken,
-        refreshToken
-    } = await serverCookies.getCookiesLogin()
-
-    const getResponse = async ({
-        refreshToken,
-        accessToken
-    }: Tokens) => await fetch(
-        BASE_URL + url,
-        {
-            ...config,
-            method: "POST",
-            body: JSON.stringify(body),
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Credentials": "true",
-                ...config?.headers,
-                Cookie: (
-                    `refresh_token=${refreshToken}; `
-                    + `access_token=${accessToken}`
-                )
-            }
-        }
-    )
-
-    let response = await getResponse({ refreshToken, accessToken })
-
-    if (response.status === 401) {
-        await refresh()
-        const updatedTokens = await serverCookies.getCookiesLogin()
-
-        response = await getResponse({
-            refreshToken: updatedTokens.refreshToken,
-            accessToken: updatedTokens.accessToken
-        })
-    }
-
-    const data = await response.json()
-
-    return {
-        status: response.status,
-        headers: response.headers,
-        data: data,
-    }
-}
-
-export const get = async <T>(
-    url: string,
-    config?: Omit<RequestInit, "body" | "method">
-): Promise<ApiResponse<T>> => {
-    const {
-        accessToken,
-        refreshToken
-    } = await serverCookies.getCookiesLogin()
+    const { accessToken, refreshToken } = await serverCookies.getCookiesLogin()
 
     const getResponse = async ({
         accessToken, refreshToken
@@ -123,15 +69,14 @@ export const get = async <T>(
         BASE_URL + url,
         {
             ...config,
-            method: "GET",
+            method,
+            body: body ? JSON.stringify(body) : undefined,
             credentials: "include",
             headers: {
+                "Content-Type": body ? "application/json" : "",
                 ...config?.headers,
-                Cookie: (
-                    `refresh_token=${refreshToken}; `
-                    + `access_token=${accessToken}`
-                )
-            }
+                Cookie: `refresh_token=${refreshToken}; access_token=${accessToken}`,
+            },
         }
     )
 
@@ -140,10 +85,9 @@ export const get = async <T>(
     if (response.status === 401) {
         await refresh()
         const updatedTokens = await serverCookies.getCookiesLogin()
-
         response = await getResponse({
             refreshToken: updatedTokens.refreshToken,
-            accessToken: updatedTokens.accessToken
+            accessToken: updatedTokens.accessToken,
         })
     }
 
@@ -152,6 +96,23 @@ export const get = async <T>(
     return {
         status: response.status,
         headers: response.headers,
-        data: data
+        data,
     }
 }
+
+export const post = async <T>(
+    url: string,
+    body: object,
+    config?: RequestConfig
+) => await request<T>("POST", url, body, config)
+
+export const get = async <T>(
+    url: string,
+    config?: RequestConfig
+) => await request<T>("GET", url, undefined, config)
+
+export const del = async <T>(
+    url: string,
+    body: object,
+    config?: RequestConfig
+) => await request<T>("DELETE", url, body, config)
