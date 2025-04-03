@@ -22,9 +22,8 @@ export const DeleteAccountButton = () => {
         clearErrors,
     } = useForm({ resolver: zodResolver(deleteCustomerObject) })
 
-
     const closeDialog = () => {
-        if(isPending || isSubmitting) return
+        if (isPending || isSubmitting) return
         dialogRef.current!.close()
         reset()
     }
@@ -52,9 +51,12 @@ export const DeleteAccountButton = () => {
             } as DeleteCustomerRequest)
         })
 
-        if(response.status != 200){
+        if (response.status != 200) {
             const data = await response.json() as DeleteCustomerResponse
-            setError("root.serverError", { type: "custom", message: data.message })
+            setError("root.serverError", {
+                type: "custom",
+                message: data.message
+            })
             return
         }
 
@@ -63,8 +65,8 @@ export const DeleteAccountButton = () => {
     })
 
     const handleKeyDownPass = () => {
-        if(!!errors.root?.serverError){
-            clearErrors()
+        if (!!errors.root?.serverError) {
+            clearErrors(["root.serverError"] as any)
         }
     }
 

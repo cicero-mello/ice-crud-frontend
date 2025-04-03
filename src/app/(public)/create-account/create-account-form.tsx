@@ -3,27 +3,28 @@
 import { CreateCustomerRequest, CreateCustomerResponse } from "@/app/api/create-customer/types"
 import { createCustomerObject, CreateCustomerFields } from "@/zod/create-customer"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useState } from "react"
+import { useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { Avatar } from "@/enums"
 
 export const CreateAccountForm = () => {
     const router = useRouter()
+    const [isPending, startTransition] = useTransition()
 
-    const [isLoading, setIsLoading] = useState(false)
-    const [backendError, setBackendError] = useState("")
-
-    const { handleSubmit, register, formState } = useForm({
+    const {
+        handleSubmit,
+        register,
+        formState: { errors, dirtyFields, isSubmitting },
+        setError,
+        clearErrors
+    } = useForm({
         resolver: zodResolver(createCustomerObject)
     })
 
-    const { errors, dirtyFields, isSubmitting } = formState
-
-    const onSubmit = async (fields: CreateCustomerFields) => {
-        setBackendError("")
-        setIsLoading(true)
-
+    const onSubmit = async (
+        fields: CreateCustomerFields
+    ) => startTransition(async () => {
         const response = await fetch("/api/create-customer", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -36,17 +37,30 @@ export const CreateAccountForm = () => {
         const data = await response.json() as CreateCustomerResponse
 
         if (response.status !== 201) {
-            setBackendError(data.message ?? "Next Server Error")
-            setIsLoading(false)
+            setError("root.serverError", {
+                type: "custom",
+                message: data.message ?? "Next Server Error"
+            })
             return
         }
 
         router.push("/ice-creams")
+    })
+
+    const onKeyDownInputName = () => {
+        if (!!errors.root?.serverError) {
+            clearErrors(["root.serverError"] as any)
+        }
     }
 
     const haveVisibleErrors = !!errors.name || !!errors.pass || !!errors.avatar
     const isAllFieldsDirty = dirtyFields.name && dirtyFields.pass && dirtyFields.avatar
-    const formSubmitEnable = !haveVisibleErrors && isAllFieldsDirty && !isSubmitting && !isLoading
+    const formSubmitEnable = (
+        !haveVisibleErrors
+        && isAllFieldsDirty
+        && !isSubmitting
+        && !isPending
+    )
 
     return (
         <form
@@ -57,6 +71,7 @@ export const CreateAccountForm = () => {
                 Name:
                 <input
                     className="border-amber-50 border-2"
+                    onKeyDown={onKeyDownInputName}
                     {...register("name")}
                 />
                 {errors.name &&
@@ -101,10 +116,10 @@ export const CreateAccountForm = () => {
                 }
             </label>
 
-            {backendError &&
+            {!!errors.root?.serverError &&
                 <p
                     className="text-red-300 text-center"
-                    children={backendError}
+                    children={errors.root.serverError.message}
                 />
             }
 
@@ -118,7 +133,7 @@ export const CreateAccountForm = () => {
                     "transition duration-100"
                 }
             >
-                {(isSubmitting || isLoading) ? "Loading..." : "Create Account"}
+                {(isSubmitting || isPending) ? "Loading..." : "Create Account"}
             </button>
         </form>
     )
