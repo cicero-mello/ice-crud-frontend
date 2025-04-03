@@ -75,7 +75,10 @@ const request = async <T>(
             headers: {
                 "Content-Type": body ? "application/json" : "",
                 ...config?.headers,
-                Cookie: `refresh_token=${refreshToken}; access_token=${accessToken}`,
+                Cookie: (
+                    `refresh_token=${refreshToken}; `
+                    + `access_token=${accessToken}`
+                )
             },
         }
     )

@@ -1,11 +1,11 @@
 "use server"
 
-import { DeleteAccountButton, LogoutButton } from "@/components/customer"
+import { CustomerInfo, DeleteAccountButton, LogoutButton } from "@/components/customer"
 
-const CustomerSettings = () => {
-
+const CustomerSettings = async () => {
     return (
         <div className="flex flex-col gap-4 pt-10 items-center">
+            <CustomerInfo />
             <LogoutButton />
             <DeleteAccountButton />
         </div>
