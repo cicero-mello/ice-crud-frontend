@@ -3,13 +3,13 @@
 import { PrivateHeader } from "@/components"
 
 const PrivateRouteLayout = (
-    { children }: Readonly<{ children: React.ReactNode}>
+    { children }: Readonly<{ children: React.ReactNode }>
 ) => {
 
     return (
         <>
             <PrivateHeader />
-            <main> {children} </main>
+            {children}
         </>
     )
 }

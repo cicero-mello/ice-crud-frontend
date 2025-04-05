@@ -3,9 +3,9 @@
 const Landing = () => {
 
     return (
-        <div>
+        <main>
             LandingPage
-        </div>
+        </main>
     )
 }
 

@@ -1,7 +1,14 @@
+"use server"
+
+import { IceCreamList } from "@/components/ice-creams"
+
 const IceCreams = () => {
 
     return (
-        <div> IceCreams </div>
+        <main>
+            <h1>Ice Creams: </h1>
+            <IceCreamList />
+        </main>
     )
 }
 

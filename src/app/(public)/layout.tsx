@@ -10,8 +10,8 @@ const PublicRouteLayout = async (
 
     return (
         <>
-            {!!accessToken ? <PrivateHeader/> : <PublicHeader />}
-            <main> {children} </main>
+            {!!accessToken ? <PrivateHeader /> : <PublicHeader />}
+            {children}
         </>
     )
 }
