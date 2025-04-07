@@ -124,6 +124,9 @@ export const CreateIceCreamButton = () => {
                     <button
                         type="submit"
                         disabled={isPending}
+                        onClick={(e) => {
+                            e.stopPropagation()
+                        }}
                         className={
                             "disabled:opacity-30 disabled:pointer-events-none " +
                             "cursor-pointer underline w-fit"
