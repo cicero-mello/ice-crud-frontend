@@ -3,10 +3,11 @@
 import { DeleteCustomerRequest, DeleteCustomerResponse } from "@/app/api/delete-customer/types"
 import { DeleteCustomerFields, deleteCustomerObject } from "@/zod/delete-customer"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useRef, MouseEvent, useTransition } from "react"
+import { useRef, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import * as serverCookies from "@/utils/server-cookies"
+import { onClickBackdrop } from "@/utils/dialog"
 
 export const DeleteAccountButton = () => {
     const router = useRouter()
@@ -26,18 +27,6 @@ export const DeleteAccountButton = () => {
         if (isPending || isSubmitting) return
         dialogRef.current!.close()
         reset()
-    }
-
-    const handleClickDialog = (event: MouseEvent<HTMLDialogElement>) => {
-        const element = event.target as HTMLElement
-        const rect = element.getBoundingClientRect()
-        const isClickInBackdrop = (
-            rect.left > event.clientX ||
-            rect.right < event.clientX ||
-            rect.top > event.clientY ||
-            rect.bottom < event.clientY
-        )
-        if (isClickInBackdrop) closeDialog()
     }
 
     const onSubmit = async (
@@ -84,7 +73,7 @@ export const DeleteAccountButton = () => {
             />
             <dialog
                 ref={dialogRef}
-                onClick={handleClickDialog}
+                onClick={(e) => onClickBackdrop(e, closeDialog)}
                 className={
                     "backdrop:bg-red-500 backdrop:blur-md backdrop:opacity-40 " +
                     "bg-red-100 " +

@@ -1,11 +1,15 @@
 "use server"
 
-import { IceCreamList } from "@/components/ice-creams"
+import {
+    IceCreamList,
+    CreateIceCreamButton
+} from "@/components/ice-creams"
 
 const IceCreams = () => {
 
     return (
         <main>
+            <CreateIceCreamButton />
             <h1>Ice Creams: </h1>
             <IceCreamList />
         </main>

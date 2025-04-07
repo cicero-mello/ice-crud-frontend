@@ -18,7 +18,6 @@ export const IceCreamList = () => {
 
             if (response.status === 200) {
                 const data = await response.json() as GetCustomerIceCreamsResponse
-                console.log(data)
                 setIceCreams(data.iceCreams)
             }
         })
