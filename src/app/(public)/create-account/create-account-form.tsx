@@ -45,6 +45,7 @@ export const CreateAccountForm = () => {
         }
 
         router.push("/ice-creams")
+        router.refresh()
     })
 
     const onKeyDownInputName = () => {

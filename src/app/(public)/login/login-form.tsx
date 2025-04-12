@@ -31,7 +31,7 @@ export const LoginForm = () => {
             } as LoginRequest)
         })
 
-        if(response.status != 200){
+        if (response.status != 200) {
             const data = await response.json() as LoginResponse
             setError("root.loginServerError", {
                 type: "custom",
@@ -41,10 +41,11 @@ export const LoginForm = () => {
         }
 
         router.push("/ice-creams")
+        router.refresh()
     })
 
     const handleKeyDownName = () => {
-        if(!!errors.root?.serverError){
+        if (!!errors.root?.serverError) {
             clearErrors(["root.loginServerError"] as any)
         }
     }
