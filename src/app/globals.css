@@ -20,6 +20,10 @@
     --color-stone: #ab9b8e;
 }
 
+* {
+    box-sizing: border-box;
+}
+
 :root {
     --background: #0a0a0a;
     --foreground: #ededed;

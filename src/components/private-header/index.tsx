@@ -18,7 +18,7 @@ export const PrivateHeader = () => {
                 "bg-linen text-2xl"
             }
         >
-            <div className="flex justify-between w-full max-w-7xl">
+            <div className="flex justify-between w-full max-w-7xl relative">
                 <Link
                     href={"/"}
                     children={isInLanding ? "Ice-CRUD" : "ic"}
@@ -27,7 +27,10 @@ export const PrivateHeader = () => {
                 <Link
                     href={"/ice-creams"}
                     children={"Ice Creams"}
-                    className={isInIceCreams ? knewave.className : undefined}
+                    className={
+                        (isInIceCreams ? `${knewave.className} ` : "") +
+                        "absolute left-[50%] transform translate-x-[-50%] text-nowrap"
+                    }
                 />
                 <Link
                     href={"/customer"}
