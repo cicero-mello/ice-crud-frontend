@@ -1,33 +1,42 @@
-"use server"
+"use client"
 
+import { knewave } from "@/fonts"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
-export const PublicHeader = async () => {
+export const PublicHeader = () => {
+    const pathName = usePathname()
+    const isInLanding = pathName === "/"
+    const isInLogin = pathName === "/login"
+    const isInCreateAccount = pathName === "/create-account"
 
     return (
         <header
             className={
-                "w-full flex justify-between p-3 " +
-                "bg-gray-200 text-black"
+                "flex w-full justify-center " +
+                "pt-3 pb-4 pl-6 pr-6 " +
+                "bg-linen text-2xl"
             }
         >
-            <Link
-                href={"/"}
-                children={"Logo"}
-                className="underline"
-            />
-            <div className="flex gap-4">
+            <div className="flex justify-between w-full max-w-7xl">
                 <Link
-                    href={"/login"}
-                    children={"Login"}
-                    className="underline"
+                    href={"/"}
+                    children={isInLanding ? "Ice-CRUD" : "ic"}
+                    className={isInLanding ? knewave.className : undefined}
                 />
-                /
-                <Link
-                    href={"/create-account"}
-                    children={"Create Account"}
-                    className="underline text-nowrap"
-                />
+                <div className="flex gap-3">
+                    <Link
+                        href={"/login"}
+                        children={"Login"}
+                        className={isInLogin ? knewave.className : undefined}
+                    />
+                    /
+                    <Link
+                        href={"/create-account"}
+                        children={"Create Account"}
+                        className={isInCreateAccount ? knewave.className : undefined}
+                    />
+                </div>
             </div>
         </header>
     )
