@@ -1,6 +1,7 @@
 "use client"
 
 import { LoginRequest, LoginResponse } from "@/app/api/login/types"
+import { useQueryClient } from "@tanstack/react-query"
 import { LoginFields, loginObject } from "@/zod/login"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useTransition } from "react"
@@ -8,6 +9,8 @@ import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 
 export const LoginForm = () => {
+    const queryClient = useQueryClient()
+
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
 
@@ -40,12 +43,13 @@ export const LoginForm = () => {
             return
         }
 
+        queryClient.invalidateQueries({ queryKey: ["get-customer-data"] })
         router.push("/ice-creams")
         router.refresh()
     })
 
     const handleKeyDownName = () => {
-        if (!!errors.root?.serverError) {
+        if (!!errors.root?.loginServerError) {
             clearErrors(["root.loginServerError"] as any)
         }
     }

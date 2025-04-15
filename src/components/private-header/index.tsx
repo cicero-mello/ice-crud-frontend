@@ -3,8 +3,22 @@
 import Link from "next/link"
 import { knewave } from "@/fonts"
 import { usePathname } from "next/navigation"
+import { useQuery } from "@tanstack/react-query"
+import { getSvgUrlByAvatar } from "@/utils/avatars"
+import { GetCustomerDataResponse } from "@/app/api/get-customer-data/types"
 
 export const PrivateHeader = () => {
+    const { data, isFetching } = useQuery<GetCustomerDataResponse>({
+        queryKey: ["get-customer-data"],
+        staleTime: Infinity,
+        queryFn: async () => {
+            const response = await fetch("/api/get-customer-data", {
+                method: "GET"
+            })
+            return await response.json()
+        }
+    })
+
     const pathName = usePathname()
     const isInLanding = pathName === "/"
     const isInIceCreams = pathName.includes("/ice-creams")
@@ -34,15 +48,17 @@ export const PrivateHeader = () => {
                 />
                 <Link
                     href={"/customer"}
-                    className={isInProfile ? knewave.className : undefined}
+                    className={
+                        (isInProfile ? "opacity-80 " : "opacity-50 ") +
+                        "flex h-full"
+                    }
                 >
-                    <img
-                        src="http://localhost:3000/avatars/afro-man.svg"
-                        className={
-                            (isInProfile ? "opacity-80 " : "opacity-50 ") +
-                            "h-full bg-mud rounded-[50%]"
-                        }
-                    />
+                    {isFetching ? <div className="spinner" /> :
+                        <img
+                            src={getSvgUrlByAvatar(data?.avatar ?? 0)}
+                            className={"h-full rounded-[50%]"}
+                        />
+                    }
                 </Link>
             </div>
         </header>

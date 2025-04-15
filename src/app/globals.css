@@ -20,6 +20,37 @@
     --color-stone: #ab9b8e;
 }
 
+
+@keyframes rotate {
+    to {
+        transform: rotate(1turn);
+    }
+}
+
+@layer components {
+    .spinner {
+        --spinner-color: var(--color-stone);
+
+        width: 1.5rem;
+        height: 1.5rem;
+        align-self: center;
+        aspect-ratio: 1;
+        border-radius: 100%;
+        background:
+          radial-gradient(farthest-side, var( --spinner-color) 94%,#0000) top/0.25rem 0.25rem no-repeat,
+          conic-gradient(#0000 30%, var( --spinner-color))
+        ;
+        mask: radial-gradient(farthest-side,#0000 calc(100% - 0.25rem),#000 0);
+        -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 0.25rem),#000 0);
+
+        animation: rotate 600ms infinite linear;
+    }
+
+    .spinner-linen {
+        --spinner-color: var(--color-linen);
+    }
+}
+
 * {
     box-sizing: border-box;
 }

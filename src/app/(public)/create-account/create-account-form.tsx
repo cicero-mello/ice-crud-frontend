@@ -2,6 +2,7 @@
 
 import { CreateCustomerRequest, CreateCustomerResponse } from "@/app/api/create-customer/types"
 import { createCustomerObject, CreateCustomerFields } from "@/zod/create-customer"
+import { useQueryClient } from "@tanstack/react-query"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useTransition } from "react"
 import { useRouter } from "next/navigation"
@@ -9,6 +10,7 @@ import { useForm } from "react-hook-form"
 import { Avatar } from "@/enums"
 
 export const CreateAccountForm = () => {
+    const queryClient = useQueryClient()
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
 
@@ -44,6 +46,7 @@ export const CreateAccountForm = () => {
             return
         }
 
+        queryClient.invalidateQueries({ queryKey: ["get-customer-data"] })
         router.push("/ice-creams")
         router.refresh()
     })
