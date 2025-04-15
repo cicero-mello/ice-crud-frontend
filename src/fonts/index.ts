@@ -13,7 +13,7 @@ export const knewave = Knewave({
 
 export const kleeOne = Klee_One({
     style: "normal",
-    weight: ["400", "600"],
+    weight: ["400"],
     variable: "--font-klee-one",
     subsets: ["latin", "latin-ext"],
     preload: true,
