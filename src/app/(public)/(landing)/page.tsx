@@ -1,19 +1,22 @@
 "use server"
 
 import { knewave } from "@/fonts"
+import * as serverCookies from "@/utils/server-cookies"
+import Link from "next/link"
 
-const Landing = () => {
+const Landing = async () => {
+    const { accessToken } = await serverCookies.getCookiesLogin()
 
     return (
         <main className={
-            "flex flex-col items-center justify-center " +
-            "gap-8 pt-30 p-6 pb-30"
+            "flex flex-1 flex-col items-center justify-center " +
+            "gap-8 p-12 pb-24"
         }>
             <h1
                 children="Ice-CRUD"
                 className={
                     knewave.className +
-                    " text-8xl mb-6 text-center"
+                    " text-8xl mb-10 text-center"
                 }
             />
             <p className={
@@ -32,6 +35,14 @@ const Landing = () => {
                 dreaming up wild combos or crafting the
                 classics, the freezer is yours to command.
             </p>
+            {!accessToken && (
+                <Link
+                    href={"/create-account"}
+                    className="button-moss mt-10"
+                >
+                    Create Account
+                </Link>
+            )}
         </main>
     )
 }

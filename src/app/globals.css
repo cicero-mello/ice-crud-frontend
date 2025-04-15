@@ -20,7 +20,6 @@
     --color-stone: #ab9b8e;
 }
 
-
 @keyframes rotate {
     to {
         transform: rotate(1turn);
@@ -31,8 +30,8 @@
     .spinner {
         --spinner-color: var(--color-stone);
 
-        width: 1.5rem;
-        height: 1.5rem;
+        width: 1.5rem; /* 24px */
+        height: 1.5rem; /* 28px */
         align-self: center;
         aspect-ratio: 1;
         border-radius: 100%;
@@ -45,9 +44,19 @@
 
         animation: rotate 600ms infinite linear;
     }
-
     .spinner-linen {
         --spinner-color: var(--color-linen);
+    }
+
+    .button-moss {
+        font-family: "Knewave";
+        font-size: 1.625rem; /* 26px */
+        color: var(--color-linen);
+        border: 0.3125rem solid var(--color-linen); /* 6px */
+        border-radius: 0.75rem; /* 12px */
+        padding: 0.125rem 1.25rem 0.25rem 1.25rem; /* 2px 20px 4px 20px */
+        background-color: var(--color-moss);
+        text-align: center;
     }
 }
 
@@ -62,6 +71,7 @@
 
 body {
     background: var(--color-mud);
+    height: 100svh;
     color: var(--color-stone);
     padding: 0;
     font-family: Arial, Helvetica, sans-serif;
