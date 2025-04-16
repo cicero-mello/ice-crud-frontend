@@ -85,3 +85,9 @@ body {
     padding: 0;
     font-family: Arial, Helvetica, sans-serif;
 }
+
+::selection {
+    background: var(--color-pine);
+    color: var(--color-linen);
+    -webkit-text-stroke-color: var(--color-linen);
+}
