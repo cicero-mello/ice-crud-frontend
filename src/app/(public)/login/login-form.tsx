@@ -1,6 +1,7 @@
 "use client"
 
 import { LoginRequest, LoginResponse } from "@/app/api/login/types"
+import { InputRow, ButtonTitle, CardErrorList } from "@/components"
 import { useQueryClient } from "@tanstack/react-query"
 import { LoginFields, loginObject } from "@/zod/login"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -63,61 +64,57 @@ export const LoginForm = () => {
         !isPending
     )
 
+    const errorMessages = [
+        errors.name?.message,
+        errors.pass?.message,
+        errors.root?.loginServerError.message
+    ].filter(item => item !== undefined)
+
     return (
-        <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="gap-8 flex flex-col m-8 max-w-56 w-full"
-        >
-            <label className="flex flex-col">
-                Name:
-                <input
-                    className="border-amber-50 border-2"
-                    onKeyDown={handleKeyDownName}
-                    {...register("name")}
-                />
-                {errors.name &&
-                    <p
-                        className="text-red-300"
-                        children={errors.name.message}
-                    />
-                }
-            </label>
-
-            <label className="flex flex-col">
-                Pass:
-                <input
-                    className="border-amber-50 border-2"
-                    {...register("pass")}
-                    type="password"
-                    autoComplete="off"
-                />
-                {errors.pass &&
-                    <p
-                        className="text-red-300"
-                        children={errors.pass.message}
-                    />
-                }
-            </label>
-
-            {!!errors.root?.loginServerError &&
-                <p
-                    className="text-red-300 text-center"
-                    children={errors.root.loginServerError.message}
-                />
-            }
-
-            <button
-                type="submit"
-                disabled={!formSubmitEnable}
+        <>
+            <form
+                onSubmit={handleSubmit(onSubmit)}
                 className={
-                    "disabled:opacity-40 disabled:pointer-events-none " +
-                    "w-fit cursor-pointer self-center border-2 border-amber-50 p-2.5 rounded-md " +
-                    "hover:border-indigo-500 " +
-                    "transition duration-100"
+                    "flex flex-row-reverse flex-wrap justify-center " +
+                    "bg-linen rounded-xl " +
+                    "pt-12 pl-8 pr-8 pb-14 gap-18 m-8"
                 }
             >
-                {(isSubmitting || isPending) ? "Loading..." : "Login"}
-            </button>
-        </form>
+                <div className="flex flex-col gap-8">
+                    <InputRow.Label>
+                        username
+                        <InputRow.Input
+                            onKeyDown={handleKeyDownName}
+                            placeholder="John Doe"
+                            haveError={!!errors.name}
+                            {...register("name")}
+                        />
+                    </InputRow.Label>
+                    <InputRow.Label>
+                        password
+                        <InputRow.Input
+                            type="password"
+                            autoComplete="off"
+                            placeholder="********"
+                            haveError={!!errors.pass}
+                            {...register("pass")}
+                        />
+                    </InputRow.Label>
+                </div>
+                <ButtonTitle
+                    text="Login"
+                    type="submit"
+                    disabled={!formSubmitEnable}
+                    isLoading={(isSubmitting || isPending)}
+                />
+            </form>
+            {errorMessages.length > 0 && (
+                <CardErrorList
+                    theme="olive"
+                    messages={errorMessages}
+                    className="mr-8 ml-8"
+                />
+            )}
+        </>
     )
 }
