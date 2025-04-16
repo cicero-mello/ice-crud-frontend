@@ -1,3 +1,4 @@
+import { RadioImageItem } from "@/components/radio-image/types"
 import { Avatar } from "@/enums"
 
 const folder = "/avatars/"
@@ -56,6 +57,25 @@ const svgUrlByAvatar = new Map<Avatar, string>([
     [Avatar.SportWoman, folder + "sport-woman.svg"],
     [Avatar.YoungMan, folder + "young-man.svg"],
 ])
+
+export const nameByAvatar = new Map<Avatar, string>(
+    Array.from(svgUrlByAvatar.entries()).map(([avatar, url]) => {
+        const fileName = url.split("/").pop()?.replace(".svg", "") || ""
+        const readableName = fileName
+            .split("-")
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ")
+        return [avatar, readableName]
+    })
+)
+
+export const radioImageAvatars: RadioImageItem[] = Array.from(
+    svgUrlByAvatar.entries()
+).map(([avatar, svgUrl]) => ({
+    imageName: nameByAvatar.get(avatar) ?? "",
+    value: avatar,
+    imageUrl: svgUrl
+}))
 
 export const getSvgUrlByAvatar = (avatar: Avatar): string => (
     svgUrlByAvatar.get(avatar) ?? ""
