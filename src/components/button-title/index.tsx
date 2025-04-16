@@ -1,3 +1,5 @@
+"use client"
+
 import { kleeOne, knewave } from "@/fonts"
 import { ButtonTitleProps } from "./types"
 
