@@ -43,7 +43,9 @@ export const config = {
          * - _next/static (static files)
          * - _next/image (image optimization files)
          * - favicon.ico, sitemap.xml, robots.txt (metadata files)
+         * - emojis
+         * - avatars
          */
-        '/((?!api|_next/static|emojis|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
+        '/((?!api|_next/static|emojis|avatars|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
     ],
 }

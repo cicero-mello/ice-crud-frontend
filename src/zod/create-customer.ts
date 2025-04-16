@@ -29,9 +29,16 @@ export const createCustomerObject = z.object({
             message: "Password has a suspicious script pattern"
         }),
     avatar: z
-        .number({ message: "Invalid Avatar" })
-        .min(0, { message: "Invalid Avatar" })
-        .max(Avatar.YoungMan, { message: "Invalid Avatar" })
+        .string({ message: "Invalid Avatar!" })
+        .refine(value => !isNaN(+value), {
+            message: "Invalid Avatar!"
+        })
+        .refine(value => (+value < 0) ? false : true, {
+            message: "Invalid Avatar!"
+        })
+        .refine(value => (+value > Avatar.YoungMan) ? false : true, {
+            message: "Invalid Avatar!"
+        })
 })
 
 export type CreateCustomerFields = z.infer<typeof createCustomerObject>

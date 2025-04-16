@@ -2,12 +2,13 @@
 
 import { CreateCustomerRequest, CreateCustomerResponse } from "@/app/api/create-customer/types"
 import { createCustomerObject, CreateCustomerFields } from "@/zod/create-customer"
+import { ButtonTitle, CardErrorList, InputRow, RadioImage } from "@/components"
 import { useQueryClient } from "@tanstack/react-query"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
-import { Avatar } from "@/enums"
+import { radioImageAvatars } from "@/utils/avatars"
 
 export const CreateAccountForm = () => {
     const queryClient = useQueryClient()
@@ -21,7 +22,8 @@ export const CreateAccountForm = () => {
         setError,
         clearErrors
     } = useForm({
-        resolver: zodResolver(createCustomerObject)
+        resolver: zodResolver(createCustomerObject),
+        mode: "onChange"
     })
 
     const onSubmit = async (
@@ -33,13 +35,13 @@ export const CreateAccountForm = () => {
             body: JSON.stringify({
                 name: fields.name,
                 pass: fields.pass,
-                avatar: fields.avatar
+                avatar: +fields.avatar
             } as CreateCustomerRequest)
         })
         const data = await response.json() as CreateCustomerResponse
 
         if (response.status !== 201) {
-            setError("root.serverError", {
+            setError("root.createAccountServerError", {
                 type: "custom",
                 message: data.message ?? "Next Server Error"
             })
@@ -52,13 +54,13 @@ export const CreateAccountForm = () => {
     })
 
     const onKeyDownInputName = () => {
-        if (!!errors.root?.serverError) {
-            clearErrors(["root.serverError"] as any)
+        if (!!errors.root?.createAccountServerError) {
+            clearErrors(["root.createAccountServerError"] as any)
         }
     }
 
     const haveVisibleErrors = !!errors.name || !!errors.pass || !!errors.avatar
-    const isAllFieldsDirty = dirtyFields.name && dirtyFields.pass && dirtyFields.avatar
+    const isAllFieldsDirty = dirtyFields.name && dirtyFields.pass
     const formSubmitEnable = (
         !haveVisibleErrors
         && isAllFieldsDirty
@@ -66,79 +68,63 @@ export const CreateAccountForm = () => {
         && !isPending
     )
 
+    const errorMessages = [
+        errors.name?.message,
+        errors.pass?.message,
+        errors.avatar?.message,
+        errors.root?.createAccountServerError.message
+    ].filter(item => item !== undefined)
+
     return (
-        <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="gap-8 flex flex-col m-8 max-w-56 w-full"
-        >
-            <label className="flex flex-col">
-                Name:
-                <input
-                    className="border-amber-50 border-2"
-                    onKeyDown={onKeyDownInputName}
-                    {...register("name")}
-                />
-                {errors.name &&
-                    <p
-                        className="text-red-300"
-                        children={errors.name.message}
-                    />
-                }
-            </label>
-
-            <label className="flex flex-col">
-                Pass:
-                <input
-                    className="border-amber-50 border-2"
-                    {...register("pass")}
-                    type="password"
-                    autoComplete="off"
-                />
-                {errors.pass &&
-                    <p
-                        className="text-red-300"
-                        children={errors.pass.message}
-                    />
-                }
-            </label>
-
-            <label className="flex flex-col">
-                Avatar:
-                <input
-                    className="border-amber-50 border-2"
-                    {...register("avatar", { valueAsNumber: true })}
-                    type="number"
-                    min={0}
-                    max={Avatar.YoungMan}
-                    autoComplete="off"
-                />
-                {errors.avatar &&
-                    <p
-                        className="text-red-300"
-                        children={errors.avatar.message}
-                    />
-                }
-            </label>
-
-            {!!errors.root?.serverError &&
-                <p
-                    className="text-red-300 text-center"
-                    children={errors.root.serverError.message}
-                />
-            }
-
-            <button
-                type="submit"
-                disabled={!formSubmitEnable}
+        <>
+            <form
+                onSubmit={handleSubmit(onSubmit)}
                 className={
-                    "disabled:opacity-40 disabled:pointer-events-none " +
-                    "w-fit cursor-pointer self-center border-2 border-amber-50 p-2.5 rounded-md " +
-                    "hover:border-indigo-500 " +
-                    "transition duration-100"
+                    "flex flex-row-reverse flex-wrap justify-center " +
+                    "bg-linen rounded-xl " +
+                    "pt-12 pl-8 pr-8 pb-14 gap-18 m-8"
                 }
             >
-                {(isSubmitting || isPending) ? "Loading..." : "Create Account"}
-            </button>
-        </form>
+                <div className="flex flex-col gap-8">
+                    <InputRow.Label>
+                        username
+                        <InputRow.Input
+                            onKeyDown={onKeyDownInputName}
+                            placeholder="John Doe"
+                            haveError={!!errors.name}
+                            {...register("name")}
+                        />
+                    </InputRow.Label>
+                    <InputRow.Label>
+                        password
+                        <InputRow.Input
+                            type="password"
+                            autoComplete="off"
+                            placeholder="********"
+                            haveError={!!errors.pass}
+                            {...register("pass")}
+                        />
+                    </InputRow.Label>
+                    <RadioImage
+                        label="avatar"
+                        formRegister={register("avatar")}
+                        items={radioImageAvatars}
+                    />
+                </div>
+                <ButtonTitle
+                    text="Create Account"
+                    type="submit"
+                    disabled={!formSubmitEnable}
+                    isLoading={(isSubmitting || isPending)}
+                />
+            </form>
+            {errorMessages.length > 0 && (
+                <CardErrorList
+                    theme="olive"
+                    messages={errorMessages}
+                    className="mr-8 ml-8"
+                />
+            )}
+        </>
     )
 }
