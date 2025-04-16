@@ -60,6 +60,15 @@
     }
 }
 
+@layer utilities {
+    .text-stroke-1-taupe {
+        -webkit-text-stroke: 0.0625rem var(--color-taupe); /* 1px */
+    }
+    .disabled\:text-stroke-1-taupe:disabled {
+        -webkit-text-stroke: 0.0625rem var(--color-taupe);
+    }
+}
+
 * {
     box-sizing: border-box;
 }
