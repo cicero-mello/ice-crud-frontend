@@ -21,6 +21,7 @@ export const LoginForm = () => {
         formState: { errors, dirtyFields, isSubmitting },
         setError,
         clearErrors,
+        setFocus
     } = useForm({ resolver: zodResolver(loginObject) })
 
     const onSubmit = async (
@@ -36,6 +37,7 @@ export const LoginForm = () => {
         })
 
         if (response.status != 200) {
+            setFocus("name")
             const data = await response.json() as LoginResponse
             setError("root.loginServerError", {
                 type: "custom",

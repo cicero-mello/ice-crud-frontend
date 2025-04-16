@@ -20,7 +20,8 @@ export const CreateAccountForm = () => {
         register,
         formState: { errors, dirtyFields, isSubmitting },
         setError,
-        clearErrors
+        clearErrors,
+        setFocus
     } = useForm({
         resolver: zodResolver(createCustomerObject),
         mode: "onChange"
@@ -41,10 +42,12 @@ export const CreateAccountForm = () => {
         const data = await response.json() as CreateCustomerResponse
 
         if (response.status !== 201) {
+            setFocus("name")
             setError("root.createAccountServerError", {
                 type: "custom",
                 message: data.message ?? "Next Server Error"
             })
+
             return
         }
 
