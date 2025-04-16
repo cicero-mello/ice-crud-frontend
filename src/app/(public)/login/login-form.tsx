@@ -87,6 +87,7 @@ export const LoginForm = () => {
                             onKeyDown={handleKeyDownName}
                             placeholder="John Doe"
                             haveError={!!errors.name}
+                            inputWrapperClassName="focus-left"
                             {...register("name")}
                         />
                     </InputRow.Label>
@@ -97,6 +98,7 @@ export const LoginForm = () => {
                             autoComplete="off"
                             placeholder="********"
                             haveError={!!errors.pass}
+                            inputWrapperClassName="focus-left"
                             {...register("pass")}
                         />
                     </InputRow.Label>
@@ -106,6 +108,7 @@ export const LoginForm = () => {
                     type="submit"
                     disabled={!formSubmitEnable}
                     isLoading={(isSubmitting || isPending)}
+                    className="focus-right"
                 />
             </form>
             {errorMessages.length > 0 && (

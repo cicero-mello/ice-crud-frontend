@@ -20,7 +20,7 @@ export const RadioImage = ({
     return (
         <div className={
             className +
-            "flex flex-col"
+            " flex flex-col"
         }>
             <span className={
                 " flex flex-col text-center " +

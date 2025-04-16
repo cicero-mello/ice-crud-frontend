@@ -92,6 +92,7 @@ export const CreateAccountForm = () => {
                             onKeyDown={onKeyDownInputName}
                             placeholder="John Doe"
                             haveError={!!errors.name}
+                            inputWrapperClassName="focus-left"
                             {...register("name")}
                         />
                     </InputRow.Label>
@@ -102,6 +103,7 @@ export const CreateAccountForm = () => {
                             autoComplete="off"
                             placeholder="********"
                             haveError={!!errors.pass}
+                            inputWrapperClassName="focus-left"
                             {...register("pass")}
                         />
                     </InputRow.Label>
@@ -109,6 +111,7 @@ export const CreateAccountForm = () => {
                         label="avatar"
                         formRegister={register("avatar")}
                         items={radioImageAvatars}
+                        className="focus-left focus-color-taupe"
                     />
                 </div>
                 <ButtonTitle
@@ -116,6 +119,7 @@ export const CreateAccountForm = () => {
                     type="submit"
                     disabled={!formSubmitEnable}
                     isLoading={(isSubmitting || isPending)}
+                    className="focus-bottom"
                 />
             </form>
             {errorMessages.length > 0 && (

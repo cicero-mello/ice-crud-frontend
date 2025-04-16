@@ -22,19 +22,28 @@ export const PublicHeader = () => {
                 <Link
                     href={"/"}
                     children={isInLanding ? "Ice-CRUD" : "ic"}
-                    className={isInLanding ? knewave.className : undefined}
+                    className={
+                        (isInLanding ? knewave.className : "") +
+                        " focus-right"
+                    }
                 />
                 <div className="flex gap-3">
                     <Link
                         href={"/login"}
                         children={"Login"}
-                        className={isInLogin ? knewave.className : undefined}
+                        className={
+                            (isInLogin ? knewave.className : "") +
+                            " focus-left"
+                        }
                     />
                     /
                     <Link
                         href={"/create-account"}
                         children={"Create Account"}
-                        className={isInCreateAccount ? knewave.className : undefined}
+                        className={
+                            (isInCreateAccount ? knewave.className : "") +
+                            " focus-bottom"
+                        }
                     />
                 </div>
             </div>

@@ -26,6 +26,15 @@
     }
 }
 
+@keyframes verticalBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
 @layer components {
     .spinner {
         --spinner-color: var(--color-stone);
@@ -60,13 +69,100 @@
     }
 }
 
+@keyframes focusLeftBounce {
+    0%, 100% { transform: translateY(-50%) translateX(0); }
+    50% { transform: translateY(-50%) translateX(-0.375rem); } /* 6px */
+}
+
+@keyframes focusRightBounce {
+    0%, 100% { transform: scaleX(-1) translateY(-50%) translateX(0) ; }
+    50% { transform: scaleX(-1) translateY(-50%) translateX(-0.375rem); }  /* 6px */
+}
+
+@keyframes focusBottomBounce {
+    0%, 100% { transform: rotate(-90deg) translateY(-50%) translateX(0); }
+    50% { transform: rotate(-90deg) translateY(-50%) translateX(-0.375rem); }  /* 6px */
+}
+
+@keyframes focusTopBounce {
+    0%, 100% { transform: rotate(90deg) translateY(50%) translateX(0); }
+    50% { transform: rotate(90deg) translateY(50%) translateX(-0.375rem); }  /* 6px */
+}
+
 @layer utilities {
     .text-stroke-1-taupe {
         -webkit-text-stroke: 0.0625rem var(--color-taupe); /* 1px */
     }
     .disabled\:text-stroke-1-taupe:disabled {
-        -webkit-text-stroke: 0.0625rem var(--color-taupe);
+        -webkit-text-stroke: 0.0625rem var(--color-taupe); /* 1px */
     }
+
+/* -------------------- */
+
+    .focus-left:focus-within::after {
+        content: "➜";
+        font-size: 1.5rem; /* 24px */
+        color: var(--focus-color);
+        position: absolute;
+        height: fit-content;
+        top: 50%;
+        left: -2.25rem; /* 36px */
+        animation: focusLeftBounce 600ms ease-in infinite;
+    }
+
+    .focus-right:focus-within::after {
+        content: "➜";
+        font-size: 1.5rem; /* 24px */
+        color: var(--focus-color);
+        position: absolute;
+        top: calc(50%);
+        height: fit-content;
+        line-height: 1.5rem; /* 24px */
+        right: -2.25rem; /* 36px */
+        animation: focusRightBounce 600ms ease-in infinite;
+    }
+
+    .focus-bottom:focus-within::after {
+        content: "➜";
+        font-size: 1.5rem; /* 24px */
+        color: var(--focus-color);
+        position: absolute;
+        height: fit-content;
+        bottom: -2.875rem; /* 46px */
+        left: calc(50%);
+        animation: focusBottomBounce 600ms ease-in infinite;
+    }
+
+    .focus-top:focus-within::after {
+        content: "➜";
+        font-size: 1.5rem; /* 24px */
+        color: var(--focus-color);
+        position: absolute;
+        top: -2.875rem; /* 46px */;
+        left: calc(50% + 0.25rem); /* 4px */
+        animation: focusTopBounce 600ms ease-in infinite;
+    }
+
+    .focus-left:focus-within,
+    .focus-right:focus-within,
+    .focus-bottom:focus-within,
+    .focus-top:focus-within {
+        position: relative;
+        outline: none;
+    }
+
+    .focus-top:focus-within::after,
+    .focus-bottom:focus-within::after,
+    .focus-left:focus-within::after,
+    .focus-right:focus-within::after {
+        --focus-color: unset;
+    }
+
+    .focus-color-taupe:focus-within::after {
+        --focus-color: var(--color-taupe);
+    }
+
+/* -------------------- */
 }
 
 * {

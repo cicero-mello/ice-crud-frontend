@@ -38,7 +38,7 @@ const Landing = async () => {
             {!accessToken && (
                 <Link
                     href={"/create-account"}
-                    className="button-moss mt-10"
+                    className="button-moss mt-10 focus-top"
                 >
                     Create Account
                 </Link>
