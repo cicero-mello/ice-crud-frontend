@@ -8,8 +8,11 @@ import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import * as serverCookies from "@/utils/server-cookies"
 import { onClickBackdrop } from "@/utils/dialog"
+import { DeleteAccountButtonProps } from "./types"
 
-export const DeleteAccountButton = () => {
+export const DeleteAccountButton = ({
+    className = ""
+}: DeleteAccountButtonProps) => {
     const router = useRouter()
     const dialogRef = useRef<HTMLDialogElement>(null)
     const [isPending, startTransition] = useTransition()
@@ -64,12 +67,7 @@ export const DeleteAccountButton = () => {
             <button
                 children="Delete Account"
                 onClick={() => dialogRef.current!.showModal()}
-                className={
-                    "disabled:opacity-30 disabled:pointer-events-none " +
-                    "transition duration-150 " +
-                    "cursor-pointer underline w-fit " +
-                    "hover:text-red-400"
-                }
+                className={className + " button-rust"}
             />
             <dialog
                 ref={dialogRef}

@@ -1,33 +1,38 @@
 "use client"
 
 import { GetCustomerDataResponse } from "@/app/api/get-customer-data/types"
-import { useLayoutEffect, useState, useTransition } from "react"
+import { getSvgUrlByAvatar } from "@/utils/avatars"
+import { useQuery } from "@tanstack/react-query"
 
 export const CustomerInfo = () => {
-    const [isPending, startTransition] = useTransition()
-    const [data, setData] = useState<GetCustomerDataResponse>()
-
-    useLayoutEffect(() => {
-        startTransition(async () => {
-            const response = await fetch("/api/get-customer-data", {
+    const { data } = useQuery<GetCustomerDataResponse>({
+        queryKey: ["get-customer-data"],
+        staleTime: Infinity,
+        queryFn: async () => {
+            const response = await fetch("api/get-customer-data", {
                 method: "GET"
             })
-            if (response.status === 200) {
-                const data = await response.json() as GetCustomerDataResponse
-                setData(data)
-            }
-        })
-    }, [])
+            return await response.json()
+        }
+    })
 
     return (
-        <div className="border border-white p-4">
-            {(!!data || !!isPending) && (<>
-                <p>Avatar: {data?.avatar ?? "Loading . . ."}</p>
-                <p>Username: {data?.name ?? "Loading . . ."}</p>
+        <div
+            className={
+                "flex flex-col bg-linen rounded-xl justify-center " +
+                " p-10 pt-6 pb-6 w-60 min-h-60"
+            }
+        >
+            {!data && <div className="spinner" />}
+            {!!data && (<>
+                <img
+                    src={getSvgUrlByAvatar(data.avatar)}
+                    className="h-40 w-40"
+                />
+                <p className="text-2xl text-center text-taupe">
+                    {data.name}
+                </p>
             </>)}
-            {!data && !isPending && (
-                <p> Error to get Customer Data</p>
-            )}
         </div>
     )
 }

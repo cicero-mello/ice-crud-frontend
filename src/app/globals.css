@@ -58,6 +58,7 @@
     }
 
     .button-moss {
+        cursor: pointer;
         font-family: "Knewave";
         font-size: 1.625rem; /* 26px */
         color: var(--color-linen);
@@ -65,6 +66,18 @@
         border-radius: 0.75rem; /* 12px */
         padding: 0.125rem 1.25rem 0.25rem 1.25rem; /* 2px 20px 4px 20px */
         background-color: var(--color-moss);
+        text-align: center;
+    }
+
+    .button-rust {
+        cursor: pointer;
+        font-family: "Knewave";
+        font-size: 1.625rem; /* 26px */
+        color: var(--color-linen);
+        border: 0.3125rem solid var(--color-linen); /* 6px */
+        border-radius: 0.75rem; /* 12px */
+        padding: 0.125rem 1.25rem 0.25rem 1.25rem; /* 2px 20px 4px 20px */
+        background-color: var(--color-rust);
         text-align: center;
     }
 }

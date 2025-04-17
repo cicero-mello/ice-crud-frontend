@@ -3,8 +3,11 @@
 import * as serverCookies from "@/utils/server-cookies"
 import { useRouter } from "next/navigation"
 import { useTransition } from "react"
+import { LogoutButtonProps } from "./types"
 
-export const LogoutButton = () => {
+export const LogoutButton = ({
+    className = ""
+}: LogoutButtonProps) => {
     const [isPending, startTransition] = useTransition()
     const router = useRouter()
 
@@ -19,11 +22,7 @@ export const LogoutButton = () => {
         <button
             disabled={isPending}
             onClick={handleClick}
-            className={
-                "disabled:opacity-30 disabled:pointer-events-none " +
-                "transition duration-150 " +
-                "cursor-pointer underline w-fit"
-            }
+            className={className + " button-moss"}
         >
             Logout
         </button>

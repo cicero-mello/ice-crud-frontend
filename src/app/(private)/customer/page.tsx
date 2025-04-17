@@ -1,15 +1,29 @@
 "use server"
 
-import { CustomerInfo, DeleteAccountButton, LogoutButton } from "@/components/customer"
+import { CustomerInfo, DeleteAccountButton, EditAccountButton, LogoutButton } from "@/components/customer"
 
-const CustomerSettings = async () => {
+const Customer = async () => {
     return (
-        <main className="flex flex-col gap-4 pt-10 items-center">
+        <main
+            className={
+                "flex flex-1 items-center justify-center " +
+                "gap-12 p-10 pb-24 flex-wrap"
+            }
+        >
             <CustomerInfo />
-            <LogoutButton />
-            <DeleteAccountButton />
+            <div className="grid grid-rows-2 gap-5">
+                <EditAccountButton
+                    className="row-start-1 col-span-2 w-fit focus-right"
+                />
+                <LogoutButton
+                    className="row-start-2 w-fit focus-bottom"
+                />
+                <DeleteAccountButton
+                    className="row-start-2 w-fit focus-bottom"
+                />
+            </div>
         </main>
     )
 }
 
-export default CustomerSettings
+export default Customer

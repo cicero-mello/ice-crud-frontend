@@ -18,7 +18,7 @@ export const PublicHeader = () => {
                 "bg-linen text-2xl"
             }
         >
-            <div className="flex justify-between w-full max-w-7xl">
+            <nav className="flex justify-between w-full max-w-7xl">
                 <Link
                     href={"/"}
                     children={isInLanding ? "Ice-CRUD" : "ic"}
@@ -27,7 +27,7 @@ export const PublicHeader = () => {
                         " focus-right"
                     }
                 />
-                <div className="flex gap-3">
+                <nav className="flex gap-3">
                     <Link
                         href={"/login"}
                         children={"Login"}
@@ -45,8 +45,8 @@ export const PublicHeader = () => {
                             " focus-bottom"
                         }
                     />
-                </div>
-            </div>
+                </nav>
+            </nav>
         </header>
     )
 }

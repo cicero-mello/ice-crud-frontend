@@ -32,7 +32,7 @@ export const PrivateHeader = () => {
                 "bg-linen text-2xl"
             }
         >
-            <div className={
+            <nav className={
                 "grid grid-cols-[1fr_auto_1fr] items-center " +
                 "w-full max-w-7xl"
             }>
@@ -71,7 +71,7 @@ export const PrivateHeader = () => {
                         />
                     }
                 </Link>
-            </div>
+            </nav>
         </header>
     )
 }
