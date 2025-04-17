@@ -32,31 +32,42 @@ export const PrivateHeader = () => {
                 "bg-linen text-2xl"
             }
         >
-            <div className="flex justify-between w-full max-w-7xl relative">
+            <div className={
+                "grid grid-cols-[1fr_auto_1fr] items-center " +
+                "w-full max-w-7xl"
+            }>
                 <Link
                     href={"/"}
                     children={isInLanding ? "Ice-CRUD" : "ic"}
-                    className={isInLanding ? knewave.className : undefined}
+                    className={
+                        (isInLanding ? knewave.className : "") +
+                        "  justify-self-start w-fit " +
+                        "focus-right"
+                    }
                 />
                 <Link
                     href={"/ice-creams"}
                     children={"Ice Creams"}
                     className={
                         (isInIceCreams ? `${knewave.className} ` : "") +
-                        "absolute left-[50%] transform translate-x-[-50%] text-nowrap"
+                        "transform justify-self-center text-nowrap w-fit " +
+                        "focus-left"
                     }
                 />
                 <Link
                     href={"/customer"}
                     className={
-                        (isInProfile ? "opacity-80 " : "opacity-50 ") +
-                        "flex h-full"
+                        "flex h-full justify-self-end w-fit " +
+                        "focus-left "
                     }
                 >
                     {isFetching ? <div className="spinner" /> :
                         <img
                             src={getSvgUrlByAvatar(data?.avatar ?? 0)}
-                            className={"h-full rounded-[50%]"}
+                            className={
+                                (isInProfile ? "opacity-80 " : "opacity-50 ") +
+                                "h-8 rounded-[50%]"
+                            }
                         />
                     }
                 </Link>
