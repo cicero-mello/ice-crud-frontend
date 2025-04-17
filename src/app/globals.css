@@ -56,6 +56,9 @@
     .spinner-linen {
         --spinner-color: var(--color-linen);
     }
+    .spinner-sand {
+        --spinner-color: var(--color-sand);
+    }
 
     .button-moss {
         cursor: pointer;
@@ -75,6 +78,18 @@
         font-size: 1.625rem; /* 26px */
         color: var(--color-linen);
         border: 0.3125rem solid var(--color-linen); /* 6px */
+        border-radius: 0.75rem; /* 12px */
+        padding: 0.125rem 1.25rem 0.25rem 1.25rem; /* 2px 20px 4px 20px */
+        background-color: var(--color-rust);
+        text-align: center;
+    }
+
+    .button-rust-sand {
+        cursor: pointer;
+        font-family: "Knewave";
+        font-size: 1.625rem; /* 26px */
+        color: var(--color-sand);
+        border: 0.3125rem solid var(--color-sand); /* 6px */
         border-radius: 0.75rem; /* 12px */
         padding: 0.125rem 1.25rem 0.25rem 1.25rem; /* 2px 20px 4px 20px */
         background-color: var(--color-rust);
@@ -105,6 +120,9 @@
 @layer utilities {
     .text-stroke-1-taupe {
         -webkit-text-stroke: 0.0625rem var(--color-taupe); /* 1px */
+    }
+    .text-stroke-2-clay {
+        -webkit-text-stroke: 0.125rem var(--color-clay); /* 2px */
     }
     .disabled\:text-stroke-1-taupe:disabled {
         -webkit-text-stroke: 0.0625rem var(--color-taupe); /* 1px */

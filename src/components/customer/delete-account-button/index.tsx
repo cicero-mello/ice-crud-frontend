@@ -3,12 +3,14 @@
 import { DeleteCustomerRequest, DeleteCustomerResponse } from "@/app/api/delete-customer/types"
 import { DeleteCustomerFields, deleteCustomerObject } from "@/zod/delete-customer"
 import { zodResolver } from "@hookform/resolvers/zod"
+import * as serverCookies from "@/utils/server-cookies"
+import { DeleteAccountButtonProps } from "./types"
+import { onClickBackdrop } from "@/utils/dialog"
 import { useRef, useTransition } from "react"
+import { CardErrorList } from "@/components"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
-import * as serverCookies from "@/utils/server-cookies"
-import { onClickBackdrop } from "@/utils/dialog"
-import { DeleteAccountButtonProps } from "./types"
+import { knewave } from "@/fonts"
 
 export const DeleteAccountButton = ({
     className = ""
@@ -24,6 +26,7 @@ export const DeleteAccountButton = ({
         reset,
         setError,
         clearErrors,
+        setFocus
     } = useForm({ resolver: zodResolver(deleteCustomerObject) })
 
     const closeDialog = () => {
@@ -62,55 +65,87 @@ export const DeleteAccountButton = ({
         }
     }
 
+    const handleButtonClick = () => {
+        dialogRef.current?.showModal()
+        setFocus("pass")
+    }
+
+    const errorList = [
+        errors.pass?.message,
+        errors.root?.serverError.message
+    ].filter(error => error != undefined)
+
     return (
         <>
             <button
                 children="Delete Account"
-                onClick={() => dialogRef.current!.showModal()}
+                onClick={handleButtonClick}
                 className={className + " button-rust"}
             />
             <dialog
                 ref={dialogRef}
                 onClick={(e) => onClickBackdrop(e, closeDialog)}
                 className={
-                    "backdrop:bg-red-500 backdrop:blur-md backdrop:opacity-40 " +
-                    "bg-red-100 " +
-                    "self-center justify-self-center " +
-                    "max-w-2xl p-6 rounded-xl"
+                    "backdrop:bg-coal backdrop:opacity-93 " +
+                    "self-center justify-self-center bg-transparent " +
+                    "w-full max-w-166 "
                 }
             >
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <label>
-                        Confirm your password:
-                        <input
-                            id="pass_input"
-                            type="password"
-                            onKeyDown={handleKeyDownPass}
-                            {...register("pass")}
-                            className="border-1 border-black rounded-sm ml-4  p-1 pl-2 pr-2"
-                        />
+                <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className={
+                        "flex flex-col bg-rust text-sand rounded-xl " +
+                        "pt-1 pb-9 pr-6 pl-6 m-6"
+                    }
+                >
+                    <button
+                        children="✖"
+                        type="button"
+                        onClick={closeDialog}
+                        className={
+                            "cursor-pointer self-end items-end mr-[-0.5rem] " +
+                            "text-xl focus-left"
+                        }
+                    />
+                    <label className="flex flex-col gap-7 pt-2">
+                        <span
+                            className={
+                                "text-3xl h-fit self-center text-center " +
+                                "text-stroke-2-clay"
+                            }
+                        >
+                            Confirm Your Password
+                        </span>
+                        <div className="focus-left self-center">
+                            <input
+                                id="pass_input"
+                                type="password"
+                                onKeyDown={handleKeyDownPass}
+                                {...register("pass")}
+                                placeholder="**********"
+                                className={
+                                    " border-b-[0.1875rem] border-b-sand " +
+                                    "placeholder-sand caret-sand text-xl " +
+                                    "outline-none p-2 pb-1 max-w-50 w-full"
+                                }
+                            />
+                        </div>
                     </label>
-                    {errors.pass &&
-                        <p>{errors.pass.message}</p>
-                    }
-                    {errors.root?.serverError &&
-                        <p>{errors.root.serverError.message}</p>
-                    }
-                    <div className="flex justify-between mt-7">
+                    <div className="flex justify-between mt-11 flex-wrap gap-4">
                         <button
                             children="Cancel"
                             type="button"
                             onClick={closeDialog}
                             disabled={isPending || isSubmitting}
                             className={
-                                "disabled:opacity-30 disabled:pointer-events-none " +
-                                "cursor-pointer underline"
+                                `${knewave.className} ` +
+                                "cursor-pointer text-[1.625rem] ml-4 " +
+                                "focus-right"
                             }
                         />
                         <button
                             type="submit"
                             onClick={(e) => e.stopPropagation()}
-                            children="DELETE ACCOUNT"
                             disabled={
                                 !dirtyFields.pass ||
                                 !!errors.pass ||
@@ -119,11 +154,24 @@ export const DeleteAccountButton = ({
                             }
                             className={
                                 "disabled:opacity-30 disabled:pointer-events-none " +
-                                "cursor-pointer underline font-bold text-red-950"
+                                "button-rust-sand focus-left " +
+                                "max-w-[14.125rem] min-h-[3.4375rem] w-full " +
+                                "flex justify-center"
                             }
-                        />
+                        >
+                            {!isPending ? "Delete Account" :
+                                <div className="spinner spinner-sand" />
+                            }
+                        </button>
                     </div>
                 </form>
+                {errorList.length > 0 && (
+                    <CardErrorList
+                        theme="rust"
+                        messages={errorList}
+                        className="m-auto"
+                    />
+                )}
             </dialog>
         </>
     )
