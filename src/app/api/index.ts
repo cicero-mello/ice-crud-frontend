@@ -56,7 +56,7 @@ const refresh = async (): Promise<void> => {
 }
 
 const request = async <T>(
-    method: "GET" | "POST" | "DELETE",
+    method: "GET" | "POST" | "DELETE" | "PATCH",
     url: string,
     body?: object,
     config?: RequestConfig
@@ -119,3 +119,9 @@ export const del = async <T>(
     body: object,
     config?: RequestConfig
 ) => await request<T>("DELETE", url, body, config)
+
+export const patch = async <T>(
+    url: string,
+    body: object,
+    config?: RequestConfig
+) => await request<T>("PATCH", url, body, config)
