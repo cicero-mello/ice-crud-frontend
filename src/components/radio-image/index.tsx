@@ -2,12 +2,14 @@
 
 import { Triangle } from "../svg"
 import { RadioImageProps } from "./types"
-import { useState } from "react"
+import { useLayoutEffect, useState } from "react"
 
 export const RadioImage = ({
-    label, items, formRegister, className = " "
+    label, items, formRegister,
+    className = " ",
+    defaultCheckedIndex
 }: RadioImageProps) => {
-    const [currentItemIndex, setCurrentItemIndex] = useState(0)
+    const [currentItemIndex, setCurrentItemIndex] = useState(defaultCheckedIndex ?? 0)
 
     const nextItemIndex = (
         currentItemIndex === items.length - 1 ? 0 : currentItemIndex + 1
@@ -16,6 +18,10 @@ export const RadioImage = ({
     const previousItemIndex = (
         currentItemIndex === 0 ? items.length - 1 : currentItemIndex - 1
     )
+
+    useLayoutEffect(() => {
+        setCurrentItemIndex(defaultCheckedIndex ?? 0)
+    }, [defaultCheckedIndex])
 
     return (
         <div className={
@@ -51,7 +57,8 @@ export const RadioImage = ({
                                 value={item.value + ""}
                                 {...formRegister}
                                 id={`input-radio-${formRegister.name}-${index}`}
-                                defaultChecked={index === 0 ? true : undefined}
+                                defaultChecked={index === currentItemIndex ? true : undefined}
+                                onClick={(e) => e.stopPropagation()}
                                 onChange={(e) => {
                                     if (formRegister.onChange) formRegister.onChange(e)
                                     setCurrentItemIndex(index)

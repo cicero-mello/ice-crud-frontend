@@ -5,6 +5,7 @@ export interface RadioImageProps {
     items: RadioImageItem[]
     formRegister: InputHTMLAttributes<HTMLInputElement>
     className?: string
+    defaultCheckedIndex?: number
 }
 
 export interface RadioImageItem {

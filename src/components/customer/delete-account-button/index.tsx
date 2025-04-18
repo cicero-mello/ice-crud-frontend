@@ -121,6 +121,7 @@ export const DeleteAccountButton = ({
                                 id="pass_input"
                                 type="password"
                                 onKeyDown={handleKeyDownPass}
+                                autoComplete="on"
                                 {...register("pass")}
                                 placeholder="**********"
                                 className={
