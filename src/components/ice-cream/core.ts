@@ -1,21 +1,28 @@
 import { BallFlavor, IceCreamBaseType } from "@/enums"
+import { colors } from "@/utils/js-styles"
 
 export const bgByBall = new Map<BallFlavor, string>([
-    [BallFlavor.chocolate, "#4d4539"],
-    [BallFlavor.vanilla, "#d2c9a5"]
+    [BallFlavor.Chocolate, colors.mud],
+    [BallFlavor.Vanilla, colors.linen],
+    [BallFlavor.Grape, colors.coal],
+    [BallFlavor.Strawberry, colors.rust]
 ])
 
 export const borderByBall = new Map<BallFlavor, string>([
-    [BallFlavor.chocolate, "#ae5d40"],
-    [BallFlavor.vanilla, "#d1b187"]
+    [BallFlavor.Chocolate, colors.brick],
+    [BallFlavor.Vanilla, colors.sand],
+    [BallFlavor.Grape, colors.rust],
+    [BallFlavor.Strawberry, colors.sand]
 ])
 
 export const nameByBall = new Map<BallFlavor, string>([
-    [BallFlavor.chocolate, "Chocolate"],
-    [BallFlavor.vanilla, "Vanilla"]
+    [BallFlavor.Chocolate, "Chocolate"],
+    [BallFlavor.Vanilla, "Vanilla"],
+    [BallFlavor.Grape, "Grape"],
+    [BallFlavor.Strawberry, "Strawberry"]
 ])
 
 export const bgByBaseType = new Map<IceCreamBaseType, string>([
-    [IceCreamBaseType.Cone, "#8caba1"],
-    [IceCreamBaseType.Cup, "#c77b58"]
+    [IceCreamBaseType.Cone, colors.sage],
+    [IceCreamBaseType.Cup, colors.clay]
 ])

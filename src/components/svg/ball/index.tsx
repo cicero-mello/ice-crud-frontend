@@ -1,10 +1,11 @@
+import { colors } from "@/utils/js-styles"
 import { BallSVGProps } from "./types"
 
 export const BallSVG = ({
     height = "10rem",
-    baseColor = "#4D4539",
-    borderColor = "#AE5D40",
-    borderTopColor = "#D2C9A5",
+    baseColor = colors.mud,
+    borderColor = colors.brick,
+    borderTopColor = colors.linen,
     style
 }: BallSVGProps) => (
     <svg

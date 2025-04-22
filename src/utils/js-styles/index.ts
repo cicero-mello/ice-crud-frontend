@@ -1,0 +1,18 @@
+export const colors = {
+    sand: "#d1b187",
+    clay: "#c77b58",
+    brick: "#ae5d40",
+    rust: "#79444a",
+    coal: "#4b3d44",
+    honey: "#ba9158",
+    moss: "#927441",
+    mud: "#4d4539",
+    olive: "#77743b",
+    dune: "#b3a555",
+    linen: "#d2c9a5",
+    sage: "#8caba1",
+    pine: "#4b726e",
+    plum: "#574852",
+    taupe: "#847875",
+    stone: "#ab9b8e",
+}

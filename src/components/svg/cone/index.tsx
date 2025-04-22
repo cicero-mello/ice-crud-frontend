@@ -1,7 +1,8 @@
+import { colors } from "@/utils/js-styles"
 import { ConeSVGProps } from "./types"
 
 export const ConeSVG = ({
-    borderTopColor = "#4D4539",
+    borderTopColor = colors.mud,
     height = "14rem",
     style
 }: ConeSVGProps) => (

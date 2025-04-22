@@ -1,9 +1,9 @@
 "use client"
 
 export enum Size {
-    small,
-    medium,
-    big
+    Small,
+    Medium,
+    Big
 }
 
 export enum IceCreamBaseType {
@@ -12,8 +12,10 @@ export enum IceCreamBaseType {
 }
 
 export enum BallFlavor {
-    chocolate,
-    vanilla
+    Chocolate,
+    Vanilla,
+    Grape,
+    Strawberry
 }
 
 export enum Avatar {
