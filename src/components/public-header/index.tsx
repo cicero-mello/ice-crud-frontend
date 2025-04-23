@@ -21,6 +21,7 @@ export const PublicHeader = () => {
             <nav className="flex justify-between w-full max-w-7xl">
                 <Link
                     href={"/"}
+                    aria-label="Ice-Crud (Landing Page)"
                     children={isInLanding ? "Ice-CRUD" : "ic"}
                     className={
                         (isInLanding ? knewave.className : "") +

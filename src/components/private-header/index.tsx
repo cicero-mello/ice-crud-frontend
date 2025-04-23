@@ -38,6 +38,7 @@ export const PrivateHeader = () => {
             }>
                 <Link
                     href={"/"}
+                    aria-label="Ice-Crud (Landing Page)"
                     children={isInLanding ? "Ice-CRUD" : "ic"}
                     className={
                         (isInLanding ? knewave.className : "") +
@@ -55,6 +56,7 @@ export const PrivateHeader = () => {
                     }
                 />
                 <Link
+                    aria-label="User Settings"
                     href={"/customer"}
                     className={
                         "flex h-full justify-self-end w-fit " +
