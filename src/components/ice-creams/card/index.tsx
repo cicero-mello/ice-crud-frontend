@@ -1,68 +1,51 @@
 "use client"
 
-import { DeleteIceCreamRequest, DeleteIceCreamResponse } from "@/app/api/delete-ice-cream/types"
-import { FC, MouseEvent, useState, useTransition } from "react"
+import { bgByBaseType } from "@/components/ice-cream/core"
+import { IceCream } from "@/components/ice-cream"
 import { IceCreamCardProps } from "./types"
-import { IceCreamBaseType } from "@/enums"
 import Link from "next/link"
 
-export const IceCreamCard: FC<IceCreamCardProps> = ({
+export const IceCreamCard = ({
     id,
     name,
     balls,
     baseType
-}) => {
-    const [isDeletingIceCream, deleteIceCream] = useTransition()
-    const [errorMessage, setErrorMessage] = useState("")
-
-    const handleDeleteIceCream = (
-        event: MouseEvent<HTMLButtonElement>,
-        iceCreamId: string
-    ) => deleteIceCream(async () => {
-        event.stopPropagation()
-
-        const response = await fetch("api/delete-ice-cream", {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                iceCreamId
-            } as DeleteIceCreamRequest)
-        })
-
-        if (response.status === 200) {
-            setErrorMessage("")
-            location.reload()
-            return
-        }
-
-        const data = await response.json() as DeleteIceCreamResponse
-        setErrorMessage(data.message)
-    })
-
-    return (
-        <li
+}: IceCreamCardProps) => (
+    <li className={
+        "flex flex-col items-center max-w-46 gap-2 w-full " +
+        "focus-top focus-color-linen text-xs"
+    }>
+        <div
             className={
-                "border border-white p-4 m-4 relative " +
-                "cursor-pointer"
+                "relative h-50 w-36 overflow-hidden pb-4 " +
+                "border-[0.375rem] border-linen rounded-lg"
+            }
+            style={{
+                backgroundColor: bgByBaseType.get(baseType)
+            }}
+        >
+            <Link
+                href={`/ice-creams/${id}`}
+                aria-label={name}
+                className="flex absolute bottom-0 w-full"
+            >
+                <IceCream
+                    balls={balls.map((ball) => ball.flavor)}
+                    base={baseType}
+                    className={
+                        "transform: scale-[40%] origin-bottom bottom-2"
+                    }
+                />
+            </Link>
+        </div>
+        <Link
+            tabIndex={-1}
+            href={`/ice-creams/${id}`}
+            className={
+                "text-xl text-center line-clamp-2 text-stone"
             }
         >
-            <Link href={`/ice-creams/${id}`}>
-                <p>Name: {name}</p>
-                <p>Balls: {balls.length}</p>
-                <p>Base: {baseType === IceCreamBaseType.Cone ? "Cone" : "Cup"}</p>
-            </Link>
-            <button
-                onClick={(e) => handleDeleteIceCream(e, id)}
-                disabled={!!errorMessage || isDeletingIceCream}
-                className={
-                    "disabled:opacity-30 disabled:pointer-events-none " +
-                    "absolute right-0 top-0 mr-3 mt-3 " +
-                    "cursor-pointer " +
-                    "hover:underline"
-                }
-            >
-                {errorMessage ? errorMessage : isDeletingIceCream ? "Deleting . . ." : "Delete"}
-            </button>
-        </li>
-    )
-}
+            {name}
+        </Link>
+    </li>
+)

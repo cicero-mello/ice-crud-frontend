@@ -46,7 +46,7 @@ export const LoginForm = () => {
             return
         }
 
-        queryClient.invalidateQueries({ queryKey: ["get-customer-data"] })
+        queryClient.clear()
         router.push("/ice-creams")
         router.refresh()
     })

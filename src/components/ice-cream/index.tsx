@@ -9,7 +9,8 @@ import { IceCreamProps } from "./types"
 export const IceCream = ({
     balls,
     base,
-    withText
+    withText,
+    className = ""
 }: IceCreamProps) => {
 
     const ballDiameter = 10
@@ -33,7 +34,8 @@ export const IceCream = ({
     return (
         <div
             className={
-                "flex flex-col relative w-full " +
+                className +
+                " flex flex-col relative w-full " +
                 "justify-center items-center"
             }
             style={{

@@ -27,8 +27,8 @@ export const PrivateHeader = () => {
     return (
         <header
             className={
-                "flex w-full justify-center " +
-                "pt-3 pb-4 pl-6 pr-6 " +
+                "flex w-full justify-center sticky top-0 " +
+                "pt-3 pb-4 pl-6 pr-6 z-10 " +
                 "bg-linen text-2xl"
             }
         >

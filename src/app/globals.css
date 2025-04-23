@@ -133,6 +133,9 @@
     .text-stroke-1-taupe {
         -webkit-text-stroke: 0.0625rem var(--color-taupe); /* 1px */
     }
+    .text-stroke-1-stone {
+        -webkit-text-stroke: 0.0625rem var(--color-stone); /* 1px */
+    }
     .text-stroke-2-clay {
         -webkit-text-stroke: 0.125rem var(--color-clay); /* 2px */
     }
@@ -180,7 +183,7 @@
         font-size: 1.5rem; /* 24px */
         color: var(--focus-color);
         position: absolute;
-        top: calc(-2.875rem);
+        top: calc(-2.625rem); /* 42px */    
         left: calc(50% + 0.25rem); /* 4px */
         animation: focusTopBounce 600ms ease-in infinite;
     }
@@ -203,6 +206,9 @@
     .focus-color-taupe:focus-within::after {
         --focus-color: var(--color-taupe);
     }
+    .focus-color-linen:focus-within::after {
+        --focus-color: var(--color-linen);
+    }
     /* ---------------------------------------------------------- */
 }
 
@@ -221,6 +227,25 @@ body {
     color: var(--color-stone);
     padding: 0;
     font-family: Arial, Helvetica, sans-serif;
+
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: var(--color-stone);
+    }
+
+    &::-webkit-scrollbar-thumb {
+        cursor: grab;
+        background: var(--color-plum);
+        min-height: 7rem;
+    }
+
+    &::-webkit-scrollbar-thumb:active {
+        cursor: grabbing;
+    }
 }
 
 ::selection {
