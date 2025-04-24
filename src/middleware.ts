@@ -45,7 +45,8 @@ export const config = {
          * - favicon.ico, sitemap.xml, robots.txt (metadata files)
          * - emojis
          * - avatars
+         * - ice-cream-base
          */
-        '/((?!api|_next/static|emojis|avatars|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
+        '/((?!api|_next/static|emojis|avatars|ice-cream-base|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
     ],
 }
