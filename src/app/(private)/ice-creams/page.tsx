@@ -1,10 +1,7 @@
 "use client"
 
 import { GetCustomerIceCreamsResponse } from "@/app/api/get-customer-ice-creams/types"
-import {
-    CreateIceCreamButton
-} from "@/components/ice-creams"
-import { IceCreamCard } from "@/components/ice-creams/card"
+import { CreateIceCreamButton, IceCreamCard } from "@/components/ice-creams"
 import { useQuery } from "@tanstack/react-query"
 
 const IceCreams = () => {
@@ -31,45 +28,52 @@ const IceCreams = () => {
             {isFetching && (
                 <div className="spinner mt-20" />
             )}
-
             {!isFetching && !haveIceCreams && (
                 <>
                     <p
                         children="You don't have any Ice Creams"
                         className={
-                            "mt-10 self-center text-2xl text-center p-6"
+                            "mt-10 self-center text-2xl text-center p-6 fade-in"
                         }
                     />
                     <CreateIceCreamButton
                         text="Create Now!"
-                        className="w-fit self-center focus-bottom transform: scale-[90%]"
+                        className={
+                            "w-fit self-center focus-bottom " +
+                            "transform: scale-[90%] fade-in"
+                        }
                     />
                 </>
             )}
-
-            {haveIceCreams && (
+            {!isFetching && haveIceCreams && (
                 <>
-                    <header className="flex w-full justify-between items-center mb-10 mt-2">
+                    <header className={
+                        "flex w-full justify-between items-center " +
+                        "mb-10 mt-2 fade-in"
+                    }>
                         <p className="text-xl text-stroke-1-stone">
                             You have {iceCreams.length} Ice Creams:
                         </p>
                         <CreateIceCreamButton
                             text="Create Ice Cream"
-                            className="focus-left transform: scale-[76%] origin-right"
+                            className={
+                                "focus-left fade-in " +
+                                "transform: scale-[76%] origin-right"
+                            }
                         />
                     </header>
                     <ul
                         className={
                             "flex flex-wrap pt-4 justify-center " +
-                            "gap-x-10 gap-y-16 pb-8"
+                            "gap-x-10 gap-y-16 pb-8 fade-in"
                         }
                     >
-                        {iceCreams.map(iceCream => (
+                        {iceCreams.toReversed().map(iceCream => (
                             <IceCreamCard
                                 key={`icc-${iceCream.id}`}
                                 id={iceCream.id}
                                 name={iceCream.name}
-                                balls={iceCream.balls}
+                                balls={iceCream.balls.map(({ flavor }) => flavor)}
                                 baseType={iceCream.baseType}
                             />
                         ))}

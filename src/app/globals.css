@@ -26,6 +26,15 @@
     }
 }
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 @keyframes verticalBounce {
     0%, 100% {
         transform: translateY(0);
@@ -245,6 +254,10 @@
     }
     .focus-color-linen:focus-within::after {
         --focus-color: var(--color-linen);
+    }
+    /* ---------------------------------------------------------- */
+    .fade-in {
+        animation: fadeIn 200ms linear;
     }
     /* ---------------------------------------------------------- */
 }

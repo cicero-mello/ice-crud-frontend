@@ -85,24 +85,26 @@ export const LoginForm = () => {
                 <div className="flex flex-col gap-8">
                     <InputRow.Label>
                         username
-                        <InputRow.Input
-                            onKeyDown={handleKeyDownName}
-                            placeholder="John Doe"
-                            haveError={!!errors.name}
-                            inputWrapperClassName="focus-left"
-                            {...register("name")}
-                        />
+                        <div className="focus-left">
+                            <InputRow.Input
+                                onKeyDown={handleKeyDownName}
+                                placeholder="John Doe"
+                                haveError={!!errors.name}
+                                {...register("name")}
+                            />
+                        </div>
                     </InputRow.Label>
                     <InputRow.Label>
                         password
-                        <InputRow.Input
-                            type="password"
-                            autoComplete="off"
-                            placeholder="********"
-                            haveError={!!errors.pass}
-                            inputWrapperClassName="focus-left"
-                            {...register("pass")}
-                        />
+                        <div className="focus-left">
+                            <InputRow.Input
+                                type="password"
+                                autoComplete="off"
+                                placeholder="********"
+                                haveError={!!errors.pass}
+                                {...register("pass")}
+                            />
+                        </div>
                     </InputRow.Label>
                 </div>
                 <ButtonTitle

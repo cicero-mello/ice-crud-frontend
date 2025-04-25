@@ -137,6 +137,7 @@ export const EditAccountButton = ({
                         <button
                             children="✖"
                             type="button"
+                            aria-label="Close Dialog"
                             onClick={closeDialog}
                             className={
                                 "cursor-pointer self-end items-end mr-[-0.5rem] " +
@@ -148,13 +149,14 @@ export const EditAccountButton = ({
                     <div className="flex flex-col gap-8">
                         <InputRow.Label>
                             new username
-                            <InputRow.Input
-                                placeholder="John Doe"
-                                haveError={!!errors.name}
-                                inputWrapperClassName="focus-left"
-                                onKeyDown={clearServerError}
-                                {...register("name")}
-                            />
+                            <div className="focus-left">
+                                <InputRow.Input
+                                    placeholder="John Doe"
+                                    haveError={!!errors.name}
+                                    onKeyDown={clearServerError}
+                                    {...register("name")}
+                                />
+                            </div>
                         </InputRow.Label>
                         <RadioImage
                             label="new avatar"
@@ -165,15 +167,16 @@ export const EditAccountButton = ({
                         />
                         <InputRow.Label>
                             password
-                            <InputRow.Input
-                                type="password"
-                                autoComplete="on"
-                                placeholder="********"
-                                haveError={!!errors.pass}
-                                inputWrapperClassName="focus-left"
-                                onKeyDown={clearServerError}
-                                {...register("pass")}
-                            />
+                            <div className="focus-left">
+                                <InputRow.Input
+                                    type="password"
+                                    autoComplete="on"
+                                    placeholder="********"
+                                    haveError={!!errors.pass}
+                                    onKeyDown={clearServerError}
+                                    {...register("pass")}
+                                />
+                            </div>
                         </InputRow.Label>
                     </div>
                     <ButtonTitle

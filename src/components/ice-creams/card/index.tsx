@@ -30,7 +30,7 @@ export const IceCreamCard = ({
                 className="flex absolute bottom-0 w-full"
             >
                 <IceCream
-                    balls={balls.map((ball) => ball.flavor)}
+                    balls={balls}
                     base={baseType}
                     className={
                         "transform: scale-[40%] origin-bottom bottom-2"

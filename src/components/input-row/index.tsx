@@ -7,23 +7,20 @@ const Input = ({
     className = "",
     haveError,
     spellCheck,
-    inputWrapperClassName,
     ...rest
 }: InputProps) => (
-    <div className={inputWrapperClassName}>
-        <input
-            spellCheck={false}
-            autoComplete="off"
-            {...rest}
-            className={
-                className +
-                " border-b-[0.1875rem] " +
-                (haveError ? "border-b-brick " : "border-b-dune ") +
-                "text-taupe placeholder-stone caret-stone text-xl " +
-                "outline-none p-2 pb-1 "
-            }
-        />
-    </div>
+    <input
+        spellCheck={false}
+        autoComplete="off"
+        {...rest}
+        className={
+            className +
+            " border-b-[0.1875rem] " +
+            (haveError ? "border-b-brick " : "border-b-dune ") +
+            "text-taupe placeholder-stone caret-stone text-xl " +
+            "outline-none p-2 pb-1 "
+        }
+    />
 )
 
 const Label = ({

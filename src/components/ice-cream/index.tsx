@@ -39,6 +39,7 @@ export const IceCream = ({
                 "justify-center items-center"
             }
             style={{
+                transition: "height 300ms ease-out",
                 height: wrapperHeight + "rem",
                 backgroundColor: bgByBaseType.get(base),
             }}

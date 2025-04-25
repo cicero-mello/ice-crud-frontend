@@ -101,6 +101,7 @@ export const DeleteAccountButton = ({
                     <button
                         children="✖"
                         type="button"
+                        aria-label="Close Dialog"
                         onClick={closeDialog}
                         className={
                             "cursor-pointer self-end items-end mr-[-0.5rem] " +

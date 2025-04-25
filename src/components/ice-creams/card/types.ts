@@ -1,11 +1,10 @@
 "use client"
 
-import { IceCreamBaseType } from "@/enums"
-import { IceCreamBall } from "@/types"
+import { BallFlavor, IceCreamBaseType } from "@/enums"
 
 export interface IceCreamCardProps {
     id: string
     name: string
-    balls: IceCreamBall[]
+    balls: BallFlavor[]
     baseType: IceCreamBaseType
 }
