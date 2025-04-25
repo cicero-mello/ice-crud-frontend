@@ -112,7 +112,7 @@ export const LoginForm = () => {
                     type="submit"
                     disabled={!formSubmitEnable}
                     isLoading={(isSubmitting || isPending)}
-                    className="focus-right"
+                    className="focus-right min-h-[3.69rem] min-w-[6.88rem]"
                 />
             </form>
             {errorMessages.length > 0 && (

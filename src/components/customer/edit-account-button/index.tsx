@@ -186,7 +186,7 @@ export const EditAccountButton = ({
                         isLoading={(isSubmitting || isPending)}
                         onClick={(e) => e.stopPropagation()}
                         onKeyDown={(e) => e.stopPropagation()}
-                        className="focus-bottom"
+                        className="focus-bottom min-w-[13.125rem] min-h-[3.75rem]"
                     />
                 </form>
                 {errorList.length > 0 && (

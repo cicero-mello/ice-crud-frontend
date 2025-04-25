@@ -21,7 +21,7 @@ export const ButtonTitle = ({
             (disabled ? kleeOne.className : knewave.className) +
             " cursor-pointer text-3xl text-taupe self-center " +
             "rounded-xl h-fit pt-1 pb-2 pr-3 pl-3 " +
-            "outline-none"
+            "outline-none justify-center flex"
         }
     >
         {!!isLoading ? <div className="spinner" /> : text}

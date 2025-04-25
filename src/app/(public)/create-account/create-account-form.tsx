@@ -124,7 +124,7 @@ export const CreateAccountForm = () => {
                     type="submit"
                     disabled={!formSubmitEnable}
                     isLoading={(isSubmitting || isPending)}
-                    className="focus-bottom"
+                    className="focus-bottom min-h-[3.69rem] min-w-[15.13rem]"
                 />
             </form>
             {errorMessages.length > 0 && (
