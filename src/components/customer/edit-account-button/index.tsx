@@ -155,6 +155,7 @@ export const EditAccountButton = ({
                                     haveError={!!errors.name}
                                     onKeyDown={clearServerError}
                                     {...register("name")}
+                                    className="max-w-[15rem]"
                                 />
                             </div>
                         </InputRow.Label>
@@ -175,6 +176,7 @@ export const EditAccountButton = ({
                                     haveError={!!errors.pass}
                                     onKeyDown={clearServerError}
                                     {...register("pass")}
+                                    className="max-w-[15rem]"
                                 />
                             </div>
                         </InputRow.Label>

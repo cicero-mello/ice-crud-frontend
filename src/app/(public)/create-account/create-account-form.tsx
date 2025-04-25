@@ -97,6 +97,7 @@ export const CreateAccountForm = () => {
                                 placeholder="John Doe"
                                 haveError={!!errors.name}
                                 {...register("name")}
+                                className="max-w-[15rem]"
                             />
                         </div>
                     </InputRow.Label>
@@ -109,6 +110,7 @@ export const CreateAccountForm = () => {
                                 placeholder="********"
                                 haveError={!!errors.pass}
                                 {...register("pass")}
+                                className="max-w-[15rem]"
                             />
                         </div>
                     </InputRow.Label>

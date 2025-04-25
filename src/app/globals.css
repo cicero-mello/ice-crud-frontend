@@ -298,6 +298,9 @@ body {
     overflow-y: auto;
 }
 
+input[type="password"] {
+    font-family: sans-serif;
+}
 
 ::selection {
     background: var(--color-pine);

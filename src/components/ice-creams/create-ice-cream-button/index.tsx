@@ -197,7 +197,8 @@ export const CreateIceCreamButton = ({
                         className={
                             "flex w-100 max-h-[68svh] outline-none " +
                             " rounded-xl overflow-y-auto py-10 mb-16 " +
-                            "scrollbar-transparent border-8 border-linen"
+                            "scrollbar-transparent border-8 border-linen " +
+                            "overflow-x-hidden"
                         }
                     >
                         <IceCream
