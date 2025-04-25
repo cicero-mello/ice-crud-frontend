@@ -121,7 +121,7 @@ export const CreateIceCreamButton = ({
                 balls: balls.map(item => ({
                     flavor: +item,
                     size: Size.Medium
-                }))
+                })).toReversed()
             } as CreateIceCreamRequest)
         })
 
@@ -202,7 +202,7 @@ export const CreateIceCreamButton = ({
                         }
                     >
                         <IceCream
-                            balls={balls?.map(ball => +ball).reverse() ?? []}
+                            balls={balls?.map(ball => +ball).toReversed() ?? []}
                             base={base ? + base : 0}
                         />
                     </div>
@@ -280,12 +280,12 @@ export const CreateIceCreamButton = ({
                                                     value={"" + BallFlavor.Vanilla}
                                                 />
                                                 <SelectRow.Option
-                                                    children="strawberry"
-                                                    value={"" + BallFlavor.Strawberry}
-                                                />
-                                                <SelectRow.Option
                                                     children="grape"
                                                     value={"" + BallFlavor.Grape}
+                                                />
+                                                <SelectRow.Option
+                                                    children="strawberry"
+                                                    value={"" + BallFlavor.Strawberry}
                                                 />
                                             </SelectRow.Select>
                                         </SelectRow.Label>
