@@ -150,6 +150,31 @@
             cursor: grabbing;
         }
     }
+
+    .scrollbar-2 {
+        overflow-y: auto;
+        &::-webkit-scrollbar {
+            width: 10px;
+            background-color: var(--color-linen);
+        }
+
+        &::-webkit-scrollbar-track {
+            border-radius: 0 10px 10px 0;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            cursor: grab;
+            background: var(--color-taupe);
+            min-height: 7rem;
+            border-radius: 10px;
+        }
+
+        &::-webkit-scrollbar-thumb:active {
+            cursor: grabbing;
+        }
+    }
 }
 
 @keyframes focusLeftBounce {
@@ -178,6 +203,9 @@
     }
     .text-stroke-1-stone {
         -webkit-text-stroke: 0.0625rem var(--color-stone); /* 1px */
+    }
+    .text-stroke-1-linen {
+        -webkit-text-stroke: 0.0625rem var(--color-linen); /* 2px */
     }
     .text-stroke-2-clay {
         -webkit-text-stroke: 0.125rem var(--color-clay); /* 2px */
@@ -229,7 +257,7 @@
         font-size: 1.5rem; /* 24px */
         color: var(--focus-color);
         position: absolute;
-        top: calc(-2.625rem); /* 42px */    
+        top: calc(-2.625rem); /* 42px */
         left: calc(50% + 0.25rem); /* 4px */
         animation: focusTopBounce 600ms ease-in infinite;
     }
