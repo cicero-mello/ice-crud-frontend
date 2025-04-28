@@ -264,6 +264,21 @@
 
 * {
     box-sizing: border-box;
+}
+
+:root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+}
+
+body {
+    background: var(--color-mud);
+    min-height: 100svh;
+    color: var(--color-stone);
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+
+    overflow-y: auto;
     &::-webkit-scrollbar {
         width: 10px;
     }
@@ -283,23 +298,12 @@
     }
 }
 
-:root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-}
-
-body {
-    background: var(--color-mud);
-    min-height: 100svh;
-    color: var(--color-stone);
-    padding: 0;
-    font-family: Arial, Helvetica, sans-serif;
-
-    overflow-y: auto;
-}
-
 input[type="password"] {
     font-family: sans-serif;
+}
+
+button {
+    cursor: pointer;
 }
 
 ::selection {

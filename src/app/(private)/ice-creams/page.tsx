@@ -73,7 +73,7 @@ const IceCreams = () => {
                                 key={`icc-${iceCream.id}`}
                                 id={iceCream.id}
                                 name={iceCream.name}
-                                balls={iceCream.balls.map(({ flavor }) => flavor)}
+                                flavors={iceCream.balls.map(({ flavor }) => flavor)}
                                 baseType={iceCream.baseType}
                             />
                         ))}

@@ -1,10 +1,10 @@
 import { colors } from "@/utils/js-styles"
-import { TriangleProps } from "./types"
+import { TriangleSVGProps } from "./types"
 
-export const Triangle = ({
+export const TriangleSVG = ({
     fillPath = colors.dune,
     ...rest
-}: TriangleProps) => (
+}: TriangleSVGProps) => (
     <svg
         width="1.125rem"    // 18px
         height="1.5rem"     // 24px

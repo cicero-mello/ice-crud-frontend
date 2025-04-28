@@ -202,7 +202,7 @@ export const CreateIceCreamButton = ({
                         }
                     >
                         <IceCream
-                            balls={balls?.map(ball => +ball).toReversed() ?? []}
+                            flavors={balls?.map(ball => +ball).toReversed() ?? []}
                             base={base ? + base : 0}
                         />
                     </div>

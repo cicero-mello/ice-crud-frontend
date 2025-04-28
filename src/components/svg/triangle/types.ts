@@ -1,5 +1,5 @@
 import { SVGAttributes } from "react"
 
-export interface TriangleProps extends SVGAttributes<SVGElement> {
+export interface TriangleSVGProps extends SVGAttributes<SVGElement> {
     fillPath?: string
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { Triangle } from "../svg"
+import { TriangleSVG } from "../svg"
 import { RadioImageProps } from "./types"
 import { useLayoutEffect, useState } from "react"
 
@@ -41,7 +41,7 @@ export const RadioImage = ({
                         className={"h-fit self-center cursor-pointer"}
                         tabIndex={-1}
                     >
-                        <Triangle />
+                        <TriangleSVG />
                     </label>
                     <img
                         src={items[currentItemIndex].imageUrl}
@@ -72,7 +72,7 @@ export const RadioImage = ({
                         className={"h-fit self-center cursor-pointer"}
                         tabIndex={-1}
                     >
-                        <Triangle className="transform rotate-180" />
+                        <TriangleSVG className="transform rotate-180" />
                     </label>
                 </div>
                 <span className="w-full h-[0.1875rem] bg-dune mt-2" />

@@ -1,21 +1,28 @@
 "use client"
 
-import { bgByBall, bgByBaseType, borderByBall, nameByBall } from "./core"
+import { bgByBaseType } from "./core"
 import { IceCreamBaseType } from "@/enums"
-import { ConeSVG, CupSVG } from "../svg"
-import { BallSVG } from "../svg/ball"
 import { IceCreamProps } from "./types"
+import { Ball } from "./ball"
+import { BallEditMode } from "./ball-edit-mode"
+import { Cone } from "./cone"
+import { Cup } from "./cup"
+import { ConeEditMode } from "./cone-edit-mode"
+import { IceCreamBall } from "@/types"
+import { CupEditMode } from "./cup-edit-mode"
 
 export const IceCream = ({
     balls,
+    flavors,
     base,
     withText,
+    editMode,
     className = ""
 }: IceCreamProps) => {
 
     const ballDiameter = 10
     const ballOffsetStep = 4
-    const allBallsHeight = (balls.length - 1) * ballOffsetStep + ballDiameter
+    const allBallsHeight = (flavors.length - 1) * ballOffsetStep + ballDiameter
 
     const coneHeight = 14
     const coneOffsetTop = 4.6
@@ -44,114 +51,59 @@ export const IceCream = ({
                 backgroundColor: bgByBaseType.get(base),
             }}
         >
-            {balls.map((ball, index, array) => (
-                <div
-                    key={`ball-${index}`}
-                    style={{
-                        position: "absolute",
-                        top: (ballOffsetStep * index) + "rem",
-                    }}>
-                    {withText && (<>
-                        <span
-                            className={
-                                "absolute bg-linen rounded-3xl " +
-                                "top-[3.7rem] h-[0.36rem] w-[66%] "
-                            }
-                            style={{
-                                left: index % 2 === 0 ? "7.4rem" : "",
-                                right: index % 2 !== 0 ? "7.4rem" : "",
-                            }}
-                        />
-                        <p
-                            children={nameByBall.get(ball)}
-                            className={
-                                "text-stroke-2-linen text-3xl text-linen " +
-                                "absolute text-nowrap top-[2.4rem]"
-                            }
-                            style={{
-                                left: index % 2 === 0 ? ballDiameter + 5 + "rem" : "",
-                                right: index % 2 !== 0 ? ballDiameter + 5 + "rem" : "",
-                            }}
-                        />
-                    </>)}
-                    <BallSVG
-                        baseColor={bgByBall.get(ball)}
-                        borderColor={borderByBall.get(ball)}
-                        borderTopColor={index === 0 ?
-                            "no-border" : bgByBall.get(array[index - 1])
-                        }
-                    />
-                </div>
+            {editMode && balls!.map((ball, index, array) => (
+                <BallEditMode
+                    key={`ball-em-${index}`}
+                    ball={ball}
+                    ballDiameter={ballDiameter}
+                    ballsArray={array}
+                    index={index}
+                    ballOffsetStep={ballOffsetStep}
+                />
             ))}
-            {base === IceCreamBaseType.Cone && (
-                <div
-                    className="absolute"
-                    style={{
-                        top: allBallsHeight - coneOffsetTop + "rem",
-                    }}
-                >
-                    {withText && (<>
-                        <span
-                            className={
-                                "absolute bg-linen rounded-3xl " +
-                                "top-[3.7rem] h-[0.36rem] w-[36%] "
-                            }
-                            style={{
-                                left: balls.length % 2 === 0 ? "10rem" : "",
-                                right: balls.length % 2 !== 0 ? "10rem" : "",
-                            }}
-                        />
-                        <p
-                            children="Cone"
-                            className={
-                                "text-stroke-2-linen text-3xl text-linen " +
-                                "absolute text-nowrap top-[2.4rem]"
-                            }
-                            style={{
-                                left: balls.length % 2 === 0 ? ballDiameter + 7 + "rem" : "",
-                                right: balls.length % 2 !== 0 ? ballDiameter + 7 + "rem" : "",
-                            }}
-                        />
-                    </>)}
-                    <ConeSVG
-                        borderTopColor={
-                            bgByBall.get(balls[balls.length - 1])
-                        }
-                    />
-                </div>
+
+            {!editMode && flavors.map((flavor, index, array) => (
+                <Ball
+                    key={`ball-${index}`}
+                    flavor={flavor}
+                    ballDiameter={ballDiameter}
+                    ballsArray={array}
+                    index={index}
+                    ballOffsetStep={ballOffsetStep}
+                    withText={!!withText}
+                />
+            ))}
+            {base === IceCreamBaseType.Cone && (editMode ?
+                <ConeEditMode
+                    allBallsHeight={allBallsHeight}
+                    ballDiameter={ballDiameter}
+                    coneOffsetTop={coneOffsetTop}
+                    balls={balls as IceCreamBall[]}
+                />
+                :
+                <Cone
+                    allBallsHeight={allBallsHeight}
+                    ballDiameter={ballDiameter}
+                    coneOffsetTop={coneOffsetTop}
+                    withText={!!withText}
+                    flavors={flavors}
+                />
             )}
-            {base === IceCreamBaseType.Cup && (
-                <div
-                    className="absolute"
-                    style={{
-                        top: allBallsHeight - cupOffsetTop + "rem"
-                    }}
-                >
-                    {withText && (<>
-                        <span
-                            className={
-                                "absolute bg-linen rounded-3xl " +
-                                "top-[3.7rem] h-[0.36rem] w-[60%] "
-                            }
-                            style={{
-                                left: balls.length % 2 === 0 ? "9rem" : "",
-                                right: balls.length % 2 !== 0 ? "8.6rem" : "",
-                            }}
-                        />
-                        <p
-                            children="Cup"
-                            className={
-                                "text-stroke-2-linen text-3xl text-linen " +
-                                "absolute text-nowrap top-[2.4rem]"
-                            }
-                            style={{
-                                left: balls.length % 2 === 0 ? ballDiameter + 7 + "rem" : "",
-                                right: balls.length % 2 !== 0 ? ballDiameter + 7 + "rem" : "",
-                            }}
-                        />
-                    </>)}
-                    <CupSVG />
-                </div>
+            {base === IceCreamBaseType.Cup && (editMode ?
+                <CupEditMode
+                    allBallsHeight={allBallsHeight}
+                    cupOffsetTop={cupOffsetTop}
+                    ballDiameter={ballDiameter}
+                    balls={balls as IceCreamBall[]}
+                />
+                :
+                <Cup
+                    allBallsHeight={allBallsHeight}
+                    cupOffsetTop={cupOffsetTop}
+                    withText={!!withText}
+                    ballDiameter={ballDiameter}
+                    flavors={flavors}
+                />
             )}
         </div>
     )

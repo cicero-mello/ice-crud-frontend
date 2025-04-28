@@ -1,8 +1,11 @@
 import { BallFlavor, IceCreamBaseType } from "@/enums"
+import { IceCreamBall } from "@/types"
 
 export interface IceCreamProps {
-    balls: BallFlavor[]
+    flavors: BallFlavor[],
+    balls?: IceCreamBall[]
     base: IceCreamBaseType,
     withText?: boolean
     className?: string
+    editMode?: boolean
 }

@@ -8,7 +8,7 @@ import Link from "next/link"
 export const IceCreamCard = ({
     id,
     name,
-    balls,
+    flavors,
     baseType
 }: IceCreamCardProps) => (
     <li className={
@@ -30,7 +30,7 @@ export const IceCreamCard = ({
                 className="flex absolute bottom-0 w-full"
             >
                 <IceCream
-                    balls={balls}
+                    flavors={flavors}
                     base={baseType}
                     className={
                         "transform: scale-[40%] origin-bottom bottom-2"

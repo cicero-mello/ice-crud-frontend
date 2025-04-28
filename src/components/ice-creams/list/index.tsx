@@ -32,7 +32,7 @@ export const IceCreamList = () => {
                     key={`icc-${iceCream.id}`}
                     id={iceCream.id}
                     name={iceCream.name}
-                    balls={iceCream.balls}
+                    flavors={iceCream.balls.map(({ flavor }) => flavor)}
                     baseType={iceCream.baseType}
                 />
             ))}
