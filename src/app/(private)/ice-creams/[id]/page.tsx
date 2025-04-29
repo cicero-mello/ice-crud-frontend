@@ -12,7 +12,7 @@ const IceCreamPage = () => {
     const [isEditMode, setIsEditMode] = useState(false)
 
     const { id } = useParams<{ id: string }>()
-    const { data } = useQuery({
+    const { data, isFetching } = useQuery({
         queryKey: [`get-ice-cream-${id}`],
         queryFn: async () => {
             const result = await fetch(
@@ -23,8 +23,8 @@ const IceCreamPage = () => {
         }
     })
 
-    if (!data) return (
-        <main className="flex flex-1 justify-center align-center max-w-6xl">
+    if (!data || isFetching) return (
+        <main className="flex flex-1 justify-center align-center">
             <div className="spinner" />
         </main>
     )
@@ -77,6 +77,7 @@ const IceCreamPage = () => {
                 }}
             >
                 <Header
+                    iceCreamId={data.iceCream.id}
                     editMode={isEditMode}
                     iceCreamName={data.iceCream.name}
                 />
