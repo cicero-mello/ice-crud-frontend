@@ -58,6 +58,7 @@ export const EditAccountButton = ({
         dialogRef.current?.showModal()
 
         setRadioImageCheckedIndexDefault(data?.avatar ?? 0)
+        setValue("avatar", data?.avatar ? "" + data.avatar : "0")
         setValue("name", data?.name ?? "", { shouldDirty: true })
         setFocus("name", {
             shouldSelect: true
