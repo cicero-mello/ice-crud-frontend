@@ -1,6 +1,7 @@
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, useTransition } from "react"
 import { UpdateIceCreamBallRequest } from "@/app/api/update-ice-cream-ball/types"
 import { bgByBallFlavor, borderByBallFlavor, nameByBallFlavor } from "../core"
-import { useCallback, useEffect, useRef, useState, useTransition } from "react"
+import { DeleteBallRequest } from "@/app/api/delete-ball/types"
 import { TrashSVG, TriangleSVG } from "@/components/svg"
 import { useQueryClient } from "@tanstack/react-query"
 import { getLastEnumValue } from "@/utils/enums"
@@ -32,6 +33,7 @@ export const BallEditMode = ({
     const handleNextFlavor = (
         event: React.MouseEvent<HTMLButtonElement>
     ) => {
+        if (isPending) return
         lastClickedButtonRef.current = event.currentTarget
 
         if (currentBallFlavor === lastBallFlavor) {
@@ -44,6 +46,7 @@ export const BallEditMode = ({
     const handlePreviousFlavor = (
         event: React.MouseEvent<HTMLButtonElement>
     ) => {
+        if (isPending) return
         lastClickedButtonRef.current = event.currentTarget
 
         if (currentBallFlavor === firstBallFlavor) {
@@ -85,11 +88,11 @@ export const BallEditMode = ({
         setTimeout(() => {
             lastClickedButtonRef.current?.focus()
         }, 200)
-    }), [])
+    }), [ball])
 
     const changeBallFlavorDebounced = useCallback(
         debounce(changeBallFlavor, 500),
-        []
+        [changeBallFlavor]
     )
 
     useEffect(() => {
@@ -98,6 +101,32 @@ export const BallEditMode = ({
         }
     }, [currentBallFlavor])
 
+    const handleDeleteBall = () => startTransition(async () => {
+        if (isPending) return
+        setApiError(false)
+        const response = await fetch("/api/delete-ball", {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                iceCreamBallId: ball.id
+            } as DeleteBallRequest)
+        })
+        if (response.status != 200) {
+            setApiError(true)
+            return
+        }
+
+        await queryClient.invalidateQueries({
+            queryKey: ["get-customer-ice-creams"]
+        })
+        await queryClient.invalidateQueries({
+            queryKey: [`get-ice-cream-${iceCreamId}`]
+        })
+    })
+
+    useLayoutEffect(() => {
+        setCurrentBallFlavor(ball.flavor)
+    }, [ball])
 
     return (
         <div
@@ -146,7 +175,7 @@ export const BallEditMode = ({
                         type="button"
                         children={<TrashSVG />}
                         disabled={isPending || apiError}
-                        onClick={() => console.log(`delete`)}
+                        onClick={handleDeleteBall}
                         className={
                             "disabled:opacity-50 disabled:pointer-events-none " +
                             "transition duration-200 focus-left"
@@ -181,7 +210,7 @@ export const BallEditMode = ({
                 {index % 2 != 0 && (<>
                     <button
                         type="button"
-                        disabled={isPending}
+                        disabled={isPending || apiError}
                         children={<TriangleSVG fillPath={colors.linen} />}
                         onClick={handlePreviousFlavor}
                         className={
@@ -208,7 +237,7 @@ export const BallEditMode = ({
                         type="button"
                         disabled={isPending || apiError}
                         children={<TrashSVG />}
-                        onClick={() => console.log(`delete`)}
+                        onClick={handleDeleteBall}
                         className={
                             "disabled:opacity-50 disabled:pointer-events-none " +
                             "transition duration-200 focus-right"
