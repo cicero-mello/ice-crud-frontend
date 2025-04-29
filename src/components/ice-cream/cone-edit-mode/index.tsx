@@ -2,6 +2,7 @@ import { ConeSVG, TriangleSVG } from "@/components/svg"
 import { ConeEditModeProps } from "./types"
 import { bgByBallFlavor } from "../core"
 import { colors } from "@/utils/js-styles"
+import { BallFlavor } from "@/enums"
 
 export const ConeEditMode = ({
     allBallsHeight,
@@ -65,7 +66,7 @@ export const ConeEditMode = ({
             </div>
             <ConeSVG
                 borderTopColor={
-                    bgByBallFlavor.get(balls[balls.length - 1].flavor)
+                    bgByBallFlavor.get(balls[balls.length - 1]?.flavor ?? BallFlavor.Chocolate)
                 }
             />
         </div>
