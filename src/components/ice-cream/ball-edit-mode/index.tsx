@@ -1,18 +1,103 @@
+import { UpdateIceCreamBallRequest } from "@/app/api/update-ice-cream-ball/types"
 import { bgByBallFlavor, borderByBallFlavor, nameByBallFlavor } from "../core"
-import { BallSVG } from "../../svg/ball"
-import { BallEditModeProps } from "./types"
+import { useCallback, useEffect, useRef, useState, useTransition } from "react"
 import { TrashSVG, TriangleSVG } from "@/components/svg"
+import { useQueryClient } from "@tanstack/react-query"
+import { getLastEnumValue } from "@/utils/enums"
+import { BallEditModeProps } from "./types"
+import { debounce } from "@/utils/debounce"
 import { colors } from "@/utils/js-styles"
+import { BallSVG } from "../../svg/ball"
+import { BallFlavor } from "@/enums"
 
 export const BallEditMode = ({
     ball,
     ballDiameter,
     ballsArray,
     index,
-    ballOffsetStep
+    ballOffsetStep,
+    iceCreamId
 }: BallEditModeProps) => {
+    const lastBallFlavor = getLastEnumValue(BallFlavor)
+    const firstBallFlavor = 0
 
-    // TODO - API Integration
+    const queryClient = useQueryClient()
+
+    const lastClickedButtonRef = useRef<HTMLButtonElement>(null)
+
+    const [currentBallFlavor, setCurrentBallFlavor] = useState(ball.flavor)
+    const [apiError, setApiError] = useState(false)
+    const [isPending, startTransition] = useTransition()
+
+    const handleNextFlavor = (
+        event: React.MouseEvent<HTMLButtonElement>
+    ) => {
+        lastClickedButtonRef.current = event.currentTarget
+
+        if (currentBallFlavor === lastBallFlavor) {
+            setCurrentBallFlavor(firstBallFlavor)
+            return
+        }
+        setCurrentBallFlavor(state => state + 1)
+    }
+
+    const handlePreviousFlavor = (
+        event: React.MouseEvent<HTMLButtonElement>
+    ) => {
+        lastClickedButtonRef.current = event.currentTarget
+
+        if (currentBallFlavor === firstBallFlavor) {
+            setCurrentBallFlavor(lastBallFlavor)
+            return
+        }
+        setCurrentBallFlavor(state => state - 1)
+    }
+
+    const changeBallFlavor = useCallback((
+        ballFlavor: BallFlavor
+    ) => startTransition(async () => {
+        setApiError(false)
+        const response = await fetch("/api/update-ice-cream-ball", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                iceCreamId: iceCreamId,
+                ball: {
+                    id: ball.id,
+                    size: ball.size,
+                    flavor: ballFlavor
+                }
+            } as UpdateIceCreamBallRequest)
+        })
+
+        if (response.status != 200) {
+            setApiError(true)
+            return
+        }
+
+        await queryClient.invalidateQueries({
+            queryKey: ["get-customer-ice-creams"]
+        })
+        await queryClient.invalidateQueries({
+            queryKey: [`get-ice-cream-${iceCreamId}`]
+        })
+
+        setTimeout(() => {
+            lastClickedButtonRef.current?.focus()
+        }, 200)
+    }), [])
+
+    const changeBallFlavorDebounced = useCallback(
+        debounce(changeBallFlavor, 500),
+        []
+    )
+
+    useEffect(() => {
+        if (currentBallFlavor != ball.flavor) {
+            changeBallFlavorDebounced(currentBallFlavor)
+        }
+    }, [currentBallFlavor])
+
 
     return (
         <div
@@ -31,7 +116,7 @@ export const BallEditMode = ({
                 }}
             />
             <p
-                children={nameByBallFlavor.get(ball.flavor)}
+                children={nameByBallFlavor.get(currentBallFlavor)}
                 className={
                     "text-stroke-2-linen text-3xl text-linen " +
                     "absolute text-nowrap top-[2.4rem]"
@@ -52,49 +137,93 @@ export const BallEditMode = ({
                 }}
             >
                 {index % 2 === 0 && (<>
+                    {isPending && (
+                        <div className={
+                            "spinner spinner-linen absolute left-[-2.4rem]"
+                        } />
+                    )}
                     <button
                         type="button"
-                        className="focus-left"
                         children={<TrashSVG />}
+                        disabled={isPending || apiError}
                         onClick={() => console.log(`delete`)}
+                        className={
+                            "disabled:opacity-50 disabled:pointer-events-none " +
+                            "transition duration-200 focus-left"
+                        }
                     />
                     <button
                         type="button"
-                        className="focus-bottom"
+                        disabled={isPending || apiError}
                         children={<TriangleSVG fillPath={colors.linen} />}
-                        onClick={() => console.log(`previous`)}
+                        onClick={handlePreviousFlavor}
+                        className={
+                            "disabled:opacity-50 disabled:pointer-events-none " +
+                            "transition duration-200 focus-bottom"
+                        }
                     />
                     <button
                         type="button"
-                        className="focus-right ml-2"
-                        children={<TriangleSVG fillPath={colors.linen} className="transform: rotate-180" />}
-                        onClick={() => console.log(`next`)}
+                        disabled={isPending || apiError}
+                        onClick={handleNextFlavor}
+                        children={
+                            <TriangleSVG
+                                fillPath={colors.linen}
+                                className="transform: rotate-180"
+                            />
+                        }
+                        className={
+                            "disabled:opacity-50 disabled:pointer-events-none " +
+                            "transition duration-200 focus-right ml-2"
+                        }
                     />
                 </>)}
                 {index % 2 != 0 && (<>
                     <button
                         type="button"
-                        className="focus-left"
+                        disabled={isPending}
                         children={<TriangleSVG fillPath={colors.linen} />}
-                        onClick={() => console.log(`previous`)}
+                        onClick={handlePreviousFlavor}
+                        className={
+                            "disabled:opacity-50 disabled:pointer-events-none " +
+                            "transition duration-200 focus-left"
+                        }
                     />
                     <button
                         type="button"
-                        className="focus-bottom ml-2"
-                        children={<TriangleSVG fillPath={colors.linen} className="transform: rotate-180" />}
-                        onClick={() => console.log(`next`)}
+                        disabled={isPending || apiError}
+                        onClick={handleNextFlavor}
+                        children={
+                            <TriangleSVG
+                                fillPath={colors.linen}
+                                className="transform: rotate-180"
+                            />
+                        }
+                        className={
+                            "disabled:opacity-50 disabled:pointer-events-none " +
+                            "transition duration-200 focus-bottom ml-2"
+                        }
                     />
                     <button
                         type="button"
-                        className="focus-right"
+                        disabled={isPending || apiError}
                         children={<TrashSVG />}
                         onClick={() => console.log(`delete`)}
+                        className={
+                            "disabled:opacity-50 disabled:pointer-events-none " +
+                            "transition duration-200 focus-right"
+                        }
                     />
+                    {isPending && (
+                        <div className={
+                            "spinner spinner-linen absolute right-[-2.4rem]"
+                        } />
+                    )}
                 </>)}
             </div>
             <BallSVG
-                baseColor={bgByBallFlavor.get(ball.flavor)}
-                borderColor={borderByBallFlavor.get(ball.flavor)}
+                baseColor={bgByBallFlavor.get(currentBallFlavor)}
+                borderColor={borderByBallFlavor.get(currentBallFlavor)}
                 borderTopColor={index === 0 ?
                     "no-border" : bgByBallFlavor.get(ballsArray[index - 1].flavor)
                 }

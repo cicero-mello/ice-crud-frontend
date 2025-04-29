@@ -12,6 +12,7 @@ import { IceCreamBall } from "@/types"
 import { CupEditMode } from "./cup-edit-mode"
 
 export const IceCream = ({
+    iceCreamId,
     balls,
     flavors,
     base,
@@ -53,6 +54,7 @@ export const IceCream = ({
         >
             {editMode && balls!.map((ball, index, array) => (
                 <BallEditMode
+                    iceCreamId={iceCreamId}
                     key={`ball-em-${index}`}
                     ball={ball}
                     ballDiameter={ballDiameter}

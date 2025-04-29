@@ -89,6 +89,7 @@ const IceCreamPage = () => {
                         balls={data.iceCream.balls}
                         base={data.iceCream.baseType}
                         editMode={isEditMode}
+                        iceCreamId={id}
                         withText
                     />
                 </div>
