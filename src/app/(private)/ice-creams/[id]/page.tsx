@@ -12,7 +12,7 @@ const IceCreamPage = () => {
     const [isEditMode, setIsEditMode] = useState(false)
 
     const { id } = useParams<{ id: string }>()
-    const { data, isFetching } = useQuery({
+    const { data } = useQuery({
         queryKey: [`get-ice-cream-${id}`],
         queryFn: async () => {
             const result = await fetch(
@@ -23,7 +23,7 @@ const IceCreamPage = () => {
         }
     })
 
-    if (!data || isFetching) return (
+    if (!data) return (
         <main className="flex flex-1 justify-center align-center">
             <div className="spinner" />
         </main>
@@ -77,11 +77,12 @@ const IceCreamPage = () => {
                 }}
             >
                 <Header
-                    iceCreamId={data.iceCream.id}
+                    iceCreamId={id}
                     editMode={isEditMode}
                     iceCreamName={data.iceCream.name}
+                    ballsNumber={data.iceCream.balls.length}
                 />
-                {isEditMode && <AddBallButton />}
+                {isEditMode && <AddBallButton iceCreamId={id} />}
                 <div className="flex flex-1 my-12 items-center">
                     <IceCream
                         flavors={data.iceCream.balls.map(({ flavor }) => flavor)}

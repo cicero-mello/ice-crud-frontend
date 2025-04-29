@@ -68,7 +68,7 @@ const IceCreams = () => {
                             "gap-x-10 gap-y-16 pb-8 fade-in"
                         }
                     >
-                        {iceCreams.toReversed().map(iceCream => (
+                        {iceCreams.map(iceCream => (
                             <IceCreamCard
                                 key={`icc-${iceCream.id}`}
                                 id={iceCream.id}

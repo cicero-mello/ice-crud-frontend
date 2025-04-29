@@ -11,7 +11,8 @@ import { knewave } from "@/fonts"
 export const Header = ({
     editMode,
     iceCreamName,
-    iceCreamId
+    iceCreamId,
+    ballsNumber
 }: HeaderProps) => {
     const [name, setName] = useState(iceCreamName ?? "")
     const [apiError, setApiError] = useState(false)
@@ -37,6 +38,9 @@ export const Header = ({
 
             await queryClient.invalidateQueries({
                 queryKey: ["get-customer-ice-creams"]
+            })
+            await queryClient.invalidateQueries({
+                queryKey: [`get-ice-cream-${iceCreamId}`]
             })
         })
     }, [])
@@ -92,7 +96,7 @@ export const Header = ({
                 "text-linen text-2xl text-center " +
                 `text-2xl text-stroke-1-linen`
             }>
-                Cone + 4 balls
+                Cone + {ballsNumber} balls
             </p>
         </header>
     )
