@@ -4,11 +4,12 @@ import { AddBallButton, DeleteIceCreamButton, Header } from "@/components/ice-cr
 import { GetIceCreamResponse } from "@/app/api/get-ice-cream/types"
 import { IceCream, ArrowReturnSVG, EditSVG } from "@/components"
 import { bgByBaseType } from "@/components/ice-cream/core"
+import { useParams, useRouter } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
-import { useParams } from "next/navigation"
 import { useState } from "react"
 
 const IceCreamPage = () => {
+    const route = useRouter()
     const [isEditMode, setIsEditMode] = useState(false)
 
     const { id } = useParams<{ id: string }>()
@@ -22,6 +23,11 @@ const IceCreamPage = () => {
             return await result.json() as GetIceCreamResponse
         }
     })
+
+    if (!!data?.message) {
+        route.push("/not-found")
+        return
+    }
 
     if (!data) return (
         <main className="flex flex-1 justify-center align-center">
