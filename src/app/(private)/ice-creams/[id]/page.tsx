@@ -77,6 +77,7 @@ const IceCreamPage = () => {
                 }}
             >
                 <Header
+                    baseType={data.iceCream.baseType}
                     iceCreamId={id}
                     editMode={isEditMode}
                     iceCreamName={data.iceCream.name}

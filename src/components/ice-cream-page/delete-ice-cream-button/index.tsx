@@ -19,6 +19,7 @@ export const DeleteIceCreamButton = ({
     const [apiError, setApiError] = useState(false)
     const [isPending, startTransition] = useTransition()
     const dialogRef = useRef<HTMLDialogElement>(null)
+    const deleteButtonRef = useRef<HTMLButtonElement>(null)
 
     const closeDialog = () => {
         dialogRef.current!.close()
@@ -26,6 +27,7 @@ export const DeleteIceCreamButton = ({
 
     const openDialog = () => {
         dialogRef.current?.showModal()
+        deleteButtonRef.current?.focus()
     }
 
     const handleDeleteIceCream = () => startTransition(async () => {
@@ -109,6 +111,7 @@ export const DeleteIceCreamButton = ({
                         />
                         <button
                             type="button"
+                            ref={deleteButtonRef}
                             disabled={isPending || apiError}
                             onClick={handleDeleteIceCream}
                             className={

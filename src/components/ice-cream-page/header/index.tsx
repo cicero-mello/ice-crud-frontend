@@ -7,12 +7,14 @@ import { debounce } from "@/utils/debounce"
 import { colors } from "@/utils/js-styles"
 import { HeaderProps } from "./types"
 import { knewave } from "@/fonts"
+import { IceCreamBaseType } from "@/enums"
 
 export const Header = ({
     editMode,
     iceCreamName,
     iceCreamId,
-    ballsNumber
+    ballsNumber,
+    baseType
 }: HeaderProps) => {
     const [name, setName] = useState(iceCreamName ?? "")
     const [apiError, setApiError] = useState(false)
@@ -96,7 +98,7 @@ export const Header = ({
                 "text-linen text-2xl text-center " +
                 `text-2xl text-stroke-1-linen`
             }>
-                Cone + {ballsNumber} balls
+                {baseType === IceCreamBaseType.Cone ? "Cone" : "Cup"} + {ballsNumber} balls
             </p>
         </header>
     )

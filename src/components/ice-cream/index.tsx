@@ -51,7 +51,7 @@ export const IceCream = ({
         >
             {editMode && balls!.map((ball, index, array) => (
                 <BallEditMode
-                    iceCreamId={iceCreamId}
+                    iceCreamId={iceCreamId as string}
                     key={`ball-em-${index}`}
                     ball={ball}
                     ballDiameter={ballDiameter}
@@ -91,7 +91,7 @@ export const IceCream = ({
                     cupOffsetTop={cupOffsetTop}
                     isCone={base === IceCreamBaseType.Cone}
                     flavors={flavors}
-                    iceCreamId={iceCreamId}
+                    iceCreamId={iceCreamId as string}
                 />
             )}
         </div>
