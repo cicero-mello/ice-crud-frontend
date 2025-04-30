@@ -63,7 +63,7 @@ const IceCreamPage = () => {
                             "focus-top text-linen"
                         }
                     />
-                    <DeleteIceCreamButton />
+                    <DeleteIceCreamButton iceCreamId={id} />
                 </>)}
             </div>
             <div

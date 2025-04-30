@@ -1,14 +1,23 @@
 "use client"
 
+import { DeleteIceCreamRequest } from "@/app/api/delete-ice-cream/types"
+import { useRef, useState, useTransition } from "react"
+import { useQueryClient } from "@tanstack/react-query"
 import { DeleteIceCreamButtonProps } from "./types"
 import { onClickBackdrop } from "@/utils/dialog"
+import { useRouter } from "next/navigation"
 import { TrashSVG } from "@/components/svg"
 import { colors } from "@/utils/js-styles"
 import { knewave } from "@/fonts"
-import { useRef } from "react"
 
 export const DeleteIceCreamButton = ({
+    iceCreamId
 }: DeleteIceCreamButtonProps) => {
+    const router = useRouter()
+    const queryClient = useQueryClient()
+
+    const [apiError, setApiError] = useState(false)
+    const [isPending, startTransition] = useTransition()
     const dialogRef = useRef<HTMLDialogElement>(null)
 
     const closeDialog = () => {
@@ -18,6 +27,33 @@ export const DeleteIceCreamButton = ({
     const openDialog = () => {
         dialogRef.current?.showModal()
     }
+
+    const handleDeleteIceCream = () => startTransition(async () => {
+        const response = await fetch("/api/delete-ice-cream", {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                iceCreamId
+            } as DeleteIceCreamRequest)
+        })
+
+        if (response.status != 200) {
+            setApiError(true)
+            return
+        }
+
+        await queryClient.invalidateQueries({
+            queryKey: ["get-customer-ice-creams"]
+        })
+
+        router.push("/ice-creams")
+
+        setTimeout(() => {
+            queryClient.invalidateQueries({
+                queryKey: [`get-ice-cream-${iceCreamId}`]
+            })
+        }, 1000)
+    })
 
     return (
         <>
@@ -73,15 +109,17 @@ export const DeleteIceCreamButton = ({
                         />
                         <button
                             type="button"
-                            onClick={closeDialog}
-                            children="Delete"
+                            disabled={isPending || apiError}
+                            onClick={handleDeleteIceCream}
                             className={
                                 "disabled:opacity-30 disabled:pointer-events-none " +
                                 "button-rust-sand focus-left " +
                                 "max-w-[8.125rem] min-h-[3.4375rem] w-full " +
-                                "flex justify-center mr-1"
+                                "flex justify-center mr-1 min-w-[8.125rem]"
                             }
-                        />
+                        >
+                            {isPending ? <div className="spinner spinner-sand" /> : "Delete"}
+                        </button>
                     </footer>
                 </div>
             </dialog>
