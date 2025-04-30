@@ -25,10 +25,14 @@ export const BallEditMode = ({
     const queryClient = useQueryClient()
 
     const lastClickedButtonRef = useRef<HTMLButtonElement>(null)
+    const currentBallFlavorRef = useRef(ball.flavor)
+    const propsCurrentBallFlavorRef = useRef(ball.flavor)
 
     const [currentBallFlavor, setCurrentBallFlavor] = useState(ball.flavor)
     const [apiError, setApiError] = useState(false)
     const [isPending, startTransition] = useTransition()
+
+    currentBallFlavorRef.current = currentBallFlavor
 
     const handleNextFlavor = (
         event: React.MouseEvent<HTMLButtonElement>
@@ -56,10 +60,16 @@ export const BallEditMode = ({
         setCurrentBallFlavor(state => state - 1)
     }
 
-    const changeBallFlavor = useCallback((
-        ballFlavor: BallFlavor
-    ) => startTransition(async () => {
+    const changeBallFlavor = useCallback(() => startTransition(async () => {
+        if (currentBallFlavorRef.current === propsCurrentBallFlavorRef.current) {
+            setTimeout(() => {
+                lastClickedButtonRef.current?.focus()
+            }, 200)
+            return
+        }
+
         setApiError(false)
+
         const response = await fetch("/api/update-ice-cream-ball", {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
@@ -68,7 +78,7 @@ export const BallEditMode = ({
                 ball: {
                     id: ball.id,
                     size: ball.size,
-                    flavor: ballFlavor
+                    flavor: currentBallFlavorRef.current
                 }
             } as UpdateIceCreamBallRequest)
         })
@@ -97,9 +107,14 @@ export const BallEditMode = ({
 
     useEffect(() => {
         if (currentBallFlavor != ball.flavor) {
-            changeBallFlavorDebounced(currentBallFlavor)
+            changeBallFlavorDebounced()
         }
     }, [currentBallFlavor])
+
+    useLayoutEffect(() => {
+        setCurrentBallFlavor(ball.flavor)
+        propsCurrentBallFlavorRef.current = ball.flavor
+    }, [ball])
 
     const handleDeleteBall = () => startTransition(async () => {
         if (isPending) return
@@ -123,10 +138,6 @@ export const BallEditMode = ({
             queryKey: [`get-ice-cream-${iceCreamId}`]
         })
     })
-
-    useLayoutEffect(() => {
-        setCurrentBallFlavor(ball.flavor)
-    }, [ball])
 
     return (
         <div
