@@ -5,11 +5,8 @@ import { IceCreamBaseType } from "@/enums"
 import { IceCreamProps } from "./types"
 import { Ball } from "./ball"
 import { BallEditMode } from "./ball-edit-mode"
-import { Cone } from "./cone"
-import { Cup } from "./cup"
-import { ConeEditMode } from "./cone-edit-mode"
-import { IceCreamBall } from "@/types"
-import { CupEditMode } from "./cup-edit-mode"
+import { Base } from "./base"
+import { BaseEditMode } from "./base-edit-mode"
 
 export const IceCream = ({
     iceCreamId,
@@ -75,36 +72,26 @@ export const IceCream = ({
                     withText={!!withText}
                 />
             ))}
-            {base === IceCreamBaseType.Cone && (editMode ?
-                <ConeEditMode
+            {!editMode && (
+                <Base
                     allBallsHeight={allBallsHeight}
                     ballDiameter={ballDiameter}
                     coneOffsetTop={coneOffsetTop}
-                    balls={balls as IceCreamBall[]}
-                />
-                :
-                <Cone
-                    allBallsHeight={allBallsHeight}
-                    ballDiameter={ballDiameter}
-                    coneOffsetTop={coneOffsetTop}
-                    withText={!!withText}
+                    cupOffsetTop={cupOffsetTop}
+                    isCone={base === IceCreamBaseType.Cone}
                     flavors={flavors}
+                    withText={!!withText}
                 />
             )}
-            {base === IceCreamBaseType.Cup && (editMode ?
-                <CupEditMode
+            {editMode && (
+                <BaseEditMode
                     allBallsHeight={allBallsHeight}
-                    cupOffsetTop={cupOffsetTop}
                     ballDiameter={ballDiameter}
-                    balls={balls as IceCreamBall[]}
-                />
-                :
-                <Cup
-                    allBallsHeight={allBallsHeight}
+                    coneOffsetTop={coneOffsetTop}
                     cupOffsetTop={cupOffsetTop}
-                    withText={!!withText}
-                    ballDiameter={ballDiameter}
+                    isCone={base === IceCreamBaseType.Cone}
                     flavors={flavors}
+                    iceCreamId={iceCreamId}
                 />
             )}
         </div>
